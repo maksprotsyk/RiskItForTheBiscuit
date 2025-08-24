@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Characters.Player
 {
+    [RequireComponent(typeof(CharacterBase))]
     public class PlayerController : MonoBehaviour
     {
 
@@ -11,7 +12,7 @@ namespace Characters.Player
         private void Awake()
         {
             m_inputReader = new InputReader();
-            m_character = GetComponentInChildren<CharacterBase>();
+            m_character = GetComponent<CharacterBase>();
 
 			AddListeners();
         }
@@ -38,14 +39,14 @@ namespace Characters.Player
         
         private void SetMovementDirection(Vector2 i_direction)
         {
-
+            m_character.SetMovementDirection(i_direction);
         }
 
         ///////////////////////////////////////////////////////
 
         private void OnAttackStarted()
         {
-
+            m_character.Attack();
         }
 
         ///////////////////////////////////////////////////////

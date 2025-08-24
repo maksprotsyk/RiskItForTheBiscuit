@@ -5,16 +5,12 @@ namespace Characters
 {
     public enum AnimationParameters
     {
-        Speed_f,
-        Death_b,
-        Jump_b,
-        Crouch_b,
-        Grounded,
-        Head_Horizontal_f,
-        Head_Vertical_f,
-        Body_Vertical_f,
-        Body_Horizontal_f,
-        Kick_t,
+        Attack,
+        Death,
+        Hurt,
+        MovingState,
+        LookX,
+        LookY,
         COUNT
     }
     public class CharacterAnimationController

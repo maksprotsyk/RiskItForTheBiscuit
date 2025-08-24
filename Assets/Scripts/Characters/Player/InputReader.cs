@@ -12,6 +12,7 @@ namespace Characters.Player
         {
             _gameInput = new GameInput();
             _gameInput.Gameplay.SetCallbacks(this);
+            _gameInput.Gameplay.Enable();
         }
 
         // Gameplay events
