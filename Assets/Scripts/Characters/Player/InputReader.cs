@@ -17,8 +17,8 @@ namespace Characters.Player
 
         // Gameplay events
         public event Action<Vector2> MoveEvent;
-        public event Action AttackStartedEvent;
-        public event Action AttackCanceledEvent;
+        public event Action<bool> RunningState;
+        public event Action AttackEvent;
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -29,11 +29,19 @@ namespace Characters.Player
         {
             if (context.performed)
             {
-                AttackStartedEvent?.Invoke(); // Start firing when the button is pressed
+                AttackEvent?.Invoke(); // Trigger attack event
+            }
+        }
+
+        public void OnRun(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                RunningState?.Invoke(true);
             }
             else if (context.canceled)
             {
-                AttackCanceledEvent?.Invoke(); // Stop firing when the button is released
+                RunningState?.Invoke(false);
             }
         }
     }

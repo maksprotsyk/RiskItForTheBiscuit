@@ -5,7 +5,6 @@ namespace Characters.Player
     [RequireComponent(typeof(CharacterBase))]
     public class PlayerController : MonoBehaviour
     {
-
         private InputReader m_inputReader;
         private CharacterBase m_character;
 
@@ -30,39 +29,18 @@ namespace Characters.Player
         {
             RemoveListeners();
 
-            m_inputReader.MoveEvent += SetMovementDirection;
-            m_inputReader.AttackStartedEvent += OnAttackStarted;
-            m_inputReader.AttackCanceledEvent += OnAttackCanceled;
-        }
-
-        ///////////////////////////////////////////////////////
-        
-        private void SetMovementDirection(Vector2 i_direction)
-        {
-            m_character.SetMovementDirection(i_direction);
-        }
-
-        ///////////////////////////////////////////////////////
-
-        private void OnAttackStarted()
-        {
-            m_character.Attack();
-        }
-
-        ///////////////////////////////////////////////////////
-        
-        private void OnAttackCanceled()
-        {
-
+            m_inputReader.MoveEvent += m_character.Movement.SetMovementDirection;
+            m_inputReader.AttackEvent += m_character.Attack.PerformAttack;
+            m_inputReader.RunningState += m_character.Movement.SetRunningState;
         }
 
         ///////////////////////////////////////////////////////
         
         private void RemoveListeners()
         {
-            m_inputReader.MoveEvent -= SetMovementDirection;
-            m_inputReader.AttackStartedEvent -= OnAttackStarted;
-            m_inputReader.AttackCanceledEvent -= OnAttackCanceled;
+            m_inputReader.MoveEvent -= m_character.Movement.SetMovementDirection;
+            m_inputReader.AttackEvent -= m_character.Attack.PerformAttack;
+            m_inputReader.RunningState -= m_character.Movement.SetRunningState;
         }
 		
 		///////////////////////////////////////////////////////
