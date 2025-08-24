@@ -30,5 +30,9 @@ namespace Characters
         public void UpdateComponent(float deltaTime)
         {
         }
+
+        public void FixedUpdateComponent(float fixedDeltaTime)
+        {
+        }
     }
 }

@@ -10,19 +10,19 @@ namespace UI
         { 
             get
             {
-                return m_isPressed;
+                return _isPressed;
             }
             private set
             {
-                if (m_isPressed != value)
+                if (_isPressed != value)
                 {
-                    m_isPressed = value;
-                    OnButtonStateChanged?.Invoke(m_isPressed);
+                    _isPressed = value;
+                    OnButtonStateChanged?.Invoke(_isPressed);
                 }
             }
         }
 
-        private bool m_isPressed = false;
+        private bool _isPressed = false;
 
         public void OnPointerDown(PointerEventData eventData)
         {

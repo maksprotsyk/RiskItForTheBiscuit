@@ -9,5 +9,6 @@ namespace Characters
     {
         public void Init(CharacterBase characterBase);
         public void UpdateComponent(float deltaTime);
+        public void FixedUpdateComponent(float fixedDeltaTime);
     }
 }

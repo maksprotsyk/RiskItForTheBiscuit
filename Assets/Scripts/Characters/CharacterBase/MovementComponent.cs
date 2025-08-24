@@ -35,6 +35,7 @@ namespace Characters
         private Dictionary<MovingState, float> _statesSpeed;
         private Dictionary<MovingState, float> _statesStaminaChangeRate;
 
+        private MovingState _currentState;
         private Vector2 _movementDirection;
         private float _currentStamina;
         private bool _isRunningRequested;
@@ -60,6 +61,14 @@ namespace Characters
             }
         }
 
+        public float CurrentSpeed
+        {
+            get
+            {
+                return _statesSpeed[_currentState];
+            }
+        }
+
         public void SetMovementDirection(Vector2 direction)
         {
             _movementDirection = direction;
@@ -70,11 +79,13 @@ namespace Characters
                 _animationController.SetParameter(AnimationParameters.LookX, direction.x);
                 _animationController.SetParameter(AnimationParameters.LookY, direction.y);
             }
+            UpdateMovingState();
         }
 
         public void SetRunningState(bool isRunningRequested)
         {
             _isRunningRequested = isRunningRequested;
+            UpdateMovingState();
         }
 
         public void Init(CharacterBase characterBase)
@@ -82,6 +93,7 @@ namespace Characters
             _rigidBody = characterBase.GetComponent<Rigidbody2D>();
             _animationController = characterBase.AnimationController;
 
+            _currentState = MovingState.Idle;
             _currentStamina = _movementParameters.StaminaTotalAmount;
             _movementDirection = Vector2.zero;
             _isRunningRequested = false;
@@ -104,25 +116,31 @@ namespace Characters
 
         public void UpdateComponent(float deltaTime)
         {
-            MovingState movingState;
+            UpdateMovingState();
 
-            bool isStanding = _movementDirection.magnitude <= 0;
-            if (_isRunningRequested && !_isDepleted && !isStanding)
+            _animationController.SetParameter(AnimationParameters.MovingState, (int)_currentState);
+            Stamina += _statesStaminaChangeRate[_currentState] * deltaTime;
+        }
+
+        public void FixedUpdateComponent(float fixedDeltaTime)
+        {
+            _rigidBody.velocity = _statesSpeed[_currentState] * _movementDirection;
+        }
+
+        private void UpdateMovingState()
+        {
+            if (_isRunningRequested && !_isDepleted)
             {
-                movingState = MovingState.Running;
+                _currentState = MovingState.Running;
             }
-            else if (!isStanding)
+            else if (_movementDirection.magnitude > 0)
             {
-                movingState = MovingState.Walking;
+                _currentState = MovingState.Walking;
             }
             else
             {
-                movingState = MovingState.Idle;
+                _currentState = MovingState.Idle;
             }
-
-            _animationController.SetParameter(AnimationParameters.MovingState, (int)movingState);
-            _rigidBody.velocity = _statesSpeed[movingState] * _movementDirection;
-            Stamina += _statesStaminaChangeRate[movingState] * deltaTime;
         }
     }
 }

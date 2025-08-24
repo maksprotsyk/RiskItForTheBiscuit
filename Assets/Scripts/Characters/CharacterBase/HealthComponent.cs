@@ -96,6 +96,10 @@ namespace Characters
             }
         }
 
+        public void FixedUpdateComponent(float fixedDeltaTime)
+        {
+        }
+
         private bool IsInvulnerable
         {
             get 

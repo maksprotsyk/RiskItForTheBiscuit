@@ -10,6 +10,7 @@ namespace Characters
         [SerializeField] private HealthComponent _healthComponent;
 
         private CharacterAnimationController _animationController;
+        private List<ICharacterComponent> _characterComponents;
 
         public MovementComponent Movement => _movementComponent;
         public AttackComponent Attack => _attackComponent;
@@ -26,21 +27,26 @@ namespace Characters
             }
             _animationController = new CharacterAnimationController(animator);
 
-            var allComponents = new List<ICharacterComponent> { _movementComponent, _attackComponent, _healthComponent };
-            foreach (ICharacterComponent item in allComponents)
+            _characterComponents = new List<ICharacterComponent> { _movementComponent, _attackComponent, _healthComponent };
+            foreach (ICharacterComponent comp in _characterComponents)
             {
-                item.Init(this);
+                comp.Init(this);
             }
         }
 
         private void FixedUpdate()
         {
-            _movementComponent.UpdateComponent(Time.fixedDeltaTime);
+            foreach (ICharacterComponent comp in _characterComponents)
+            {
+                comp.FixedUpdateComponent(Time.fixedDeltaTime);
+            }
         }
         private void Update()
         {
-            _attackComponent.UpdateComponent(Time.deltaTime);
-            _healthComponent.UpdateComponent(Time.deltaTime);
+            foreach (ICharacterComponent comp in _characterComponents)
+            {
+                comp.UpdateComponent(Time.deltaTime);
+            }
         }
     }
 }
