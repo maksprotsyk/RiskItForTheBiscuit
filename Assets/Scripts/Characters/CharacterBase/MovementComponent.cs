@@ -6,7 +6,19 @@ namespace Characters
 {
 
     [Serializable]
-    public class MovementComponent
+    public struct MovementParameters
+    {
+        public float MovementSpeed;
+        public float RunningSpeed;
+        public float StaminaTotalAmount;
+        public float StaminaRegenRate;
+        public float StaminaWalkRegenRate;
+        public float StaminaDepletionRate;
+        public float StaminaDepletionThreshold;
+    }
+
+    [Serializable]
+    public class MovementComponent: ICharacterComponent
     {
         public enum MovingState
         {
@@ -14,20 +26,6 @@ namespace Characters
             Walking = 1,
             Running = 2
         }
-
-        [Serializable]
-        public struct MovementParameters
-        {
-            public float MovementSpeed;
-            public float RunningSpeed;
-            public float StaminaTotalAmount;
-            public float StaminaRegenRate;
-            public float StaminaWalkRegenRate;
-            public float StaminaDepletionRate;
-            public float StaminaDepletionThreshold;
-        }
-
-        private const float MinMovementMagnitude = 0.01f;
 
         [SerializeField] private MovementParameters _movementParameters;
 
@@ -67,7 +65,7 @@ namespace Characters
             _movementDirection = direction;
 
             // does not update rotation if the character is still
-            if (_movementDirection.magnitude > MinMovementMagnitude)
+            if (_movementDirection.magnitude > 0)
             {
                 _animationController.SetParameter(AnimationParameters.LookX, direction.x);
                 _animationController.SetParameter(AnimationParameters.LookY, direction.y);
@@ -79,10 +77,10 @@ namespace Characters
             _isRunningRequested = isRunningRequested;
         }
 
-        public void Init(Rigidbody2D rigidBody, CharacterAnimationController animationController)
+        public void Init(CharacterBase characterBase)
         {
-            _rigidBody = rigidBody;
-            _animationController = animationController;
+            _rigidBody = characterBase.GetComponent<Rigidbody2D>();
+            _animationController = characterBase.AnimationController;
 
             _currentStamina = _movementParameters.StaminaTotalAmount;
             _movementDirection = Vector2.zero;
@@ -104,11 +102,11 @@ namespace Characters
             };
         }
 
-        public void UpdateMovementState(float dt)
+        public void UpdateComponent(float deltaTime)
         {
             MovingState movingState;
 
-            bool isStanding = _movementDirection.magnitude < MinMovementMagnitude;
+            bool isStanding = _movementDirection.magnitude <= 0;
             if (_isRunningRequested && !_isDepleted && !isStanding)
             {
                 movingState = MovingState.Running;
@@ -124,7 +122,7 @@ namespace Characters
 
             _animationController.SetParameter(AnimationParameters.MovingState, (int)movingState);
             _rigidBody.velocity = _statesSpeed[movingState] * _movementDirection;
-            Stamina += _statesStaminaChangeRate[movingState] * dt;
+            Stamina += _statesStaminaChangeRate[movingState] * deltaTime;
         }
     }
 }

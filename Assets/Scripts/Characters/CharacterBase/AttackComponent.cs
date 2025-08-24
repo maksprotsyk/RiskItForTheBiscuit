@@ -3,17 +3,16 @@ using UnityEngine;
 
 namespace Characters
 {
+    [Serializable]
+    public struct AttackParameters
+    {
+        public float Damage;
+        public float AttackCooldown;
+    }
 
     [Serializable]
-    public class AttackComponent
+    public class AttackComponent: ICharacterComponent
     {
-        [Serializable]
-        public struct AttackParameters
-        {
-            public float Damage;
-            public float AttackCooldown;
-        }
-
         [SerializeField] private AttackParameters _attackParameters; 
         
         private CharacterAnimationController _animationController;
@@ -23,14 +22,13 @@ namespace Characters
             _animationController.SetTrigger(AnimationParameters.Attack);
         }
 
-        public void Init(CharacterAnimationController animationController)
+        public void Init(CharacterBase characterBase)
         {
-            _animationController = animationController;
+            _animationController = characterBase.AnimationController;
         }
 
-        public void UpdateAttackState(float dt)
+        public void UpdateComponent(float deltaTime)
         {
-            
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Characters
@@ -6,16 +7,17 @@ namespace Characters
     {
         [SerializeField] private MovementComponent _movementComponent;
         [SerializeField] private AttackComponent _attackComponent;
+        [SerializeField] private HealthComponent _healthComponent;
 
         private CharacterAnimationController _animationController;
-        private Rigidbody2D _rigidbody;
 
         public MovementComponent Movement => _movementComponent;
         public AttackComponent Attack => _attackComponent;
+        public HealthComponent Health => _healthComponent;
+        public CharacterAnimationController AnimationController => _animationController;
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
             Animator animator = GetComponent<Animator>();
             if (animator == null)
             {
@@ -24,17 +26,21 @@ namespace Characters
             }
             _animationController = new CharacterAnimationController(animator);
 
-            _movementComponent.Init(_rigidbody, _animationController);
-            _attackComponent.Init(_animationController);
+            var allComponents = new List<ICharacterComponent> { _movementComponent, _attackComponent, _healthComponent };
+            foreach (ICharacterComponent item in allComponents)
+            {
+                item.Init(this);
+            }
         }
 
         private void FixedUpdate()
         {
-            _movementComponent.UpdateMovementState(Time.fixedDeltaTime);
+            _movementComponent.UpdateComponent(Time.fixedDeltaTime);
         }
         private void Update()
         {
-            _attackComponent.UpdateAttackState(Time.deltaTime);
+            _attackComponent.UpdateComponent(Time.deltaTime);
+            _healthComponent.UpdateComponent(Time.deltaTime);
         }
     }
 }
