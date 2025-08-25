@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7438146934732196745}
   - component: {fileID: 406937543835212751}
   - component: {fileID: 4754068600239453809}
-  - component: {fileID: 24726243145386019}
+  - component: {fileID: 526479756561577838}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &7317406595950021294
 Animator:
   serializedVersion: 5
@@ -137,7 +137,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackComponent:
     _attackProjectiles:
-      _serializedList: []
+      _serializedList:
+      - Key: 0
+        Value: {fileID: 7032444853151934704, guid: 00c17e477edd80346a038371adc26ac8, type: 3}
 --- !u!114 &406937543835212751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,9 +206,9 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!70 &24726243145386019
-CapsuleCollider2D:
+  m_Constraints: 4
+--- !u!58 &526479756561577838
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -237,6 +239,6 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.047901154, y: -0.00684309}
-  m_Size: {x: 0.9206438, y: 1.4954572}
-  m_Direction: 0
+  m_Offset: {x: 0, y: 0.3}
+  serializedVersion: 2
+  m_Radius: 0.5

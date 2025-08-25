@@ -24,6 +24,7 @@ namespace Characters
         private GameObject _currentProjectile;
         private AttackType _currentAttackType;
         private Vector2 _attackDirection = Vector2.up;
+        private Vector2 _attackBaseOffset;
 
         private float _cooldownTimer;
 
@@ -42,6 +43,9 @@ namespace Characters
 
             _currentAttackType = AttackType.Sword;
             _cooldownTimer = 0f;
+
+            SpriteRenderer spriteRenderer = characterBase.GetComponent<SpriteRenderer>();
+            _attackBaseOffset = spriteRenderer.bounds.center - characterBase.transform.position;
         }
 
         public void OnDestroy()
@@ -105,7 +109,7 @@ namespace Characters
             if (_currentAttackType == AttackType.Sword)
             {
                 _currentProjectile = Object.Instantiate(prefab, _character.transform);
-                PositionChildHitbox(_currentProjectile.transform, _attackDirection);
+                PositionChildHitbox(_currentProjectile.transform, _attackDirection, _attackBaseOffset);
                 TrySetupDamage(_currentProjectile, _damage);
             }
             else
@@ -135,12 +139,12 @@ namespace Characters
                 RebuildCache();
         }
 
-        private static void PositionChildHitbox(Transform t, Vector2 dir)
+        private static void PositionChildHitbox(Transform t, Vector2 dir, Vector2 baseOffset)
         {
             var maxAxis = Mathf.Max(Mathf.Abs(t.localPosition.x), Mathf.Abs(t.localPosition.y));
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-            t.SetLocalPositionAndRotation(maxAxis * dir, Quaternion.Euler(0, 0, angle - 90f));
+            t.SetLocalPositionAndRotation(maxAxis * dir + baseOffset, Quaternion.Euler(0, 0, angle - 90f));
         }
 
         private static void OrientAndLaunchProjectile(Transform t, Vector2 dir)
