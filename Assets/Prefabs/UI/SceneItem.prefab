@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1087993094512923055}
   - component: {fileID: 2383544831081026895}
   - component: {fileID: 8579047301435148662}
+  - component: {fileID: 4669384837570352941}
   m_Layer: 0
   m_Name: SceneItem
   m_TagString: Untagged
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 999877501
+  m_SortingLayerID: -143719207
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
@@ -143,3 +144,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4669384837570352941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6495429892694957252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c1d047f137efb45b5c87a0a3ba2ac6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemDescription: {fileID: 11400000, guid: 5210a0f0c95561e418b0aa61fcc3a892, type: 2}

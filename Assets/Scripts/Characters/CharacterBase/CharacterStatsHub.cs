@@ -35,7 +35,7 @@ namespace Characters
 
         // Core systems
         public StatCollection Stats { get; private set; }
-        public InventoryRuntime Inventory { get; private set; }
+        public InventoryGridRuntime Inventory { get; private set; }
         public EffectSystem Effects { get; private set; }
 
         // Optional: standardize orders for everyone
@@ -64,7 +64,7 @@ namespace Characters
         public void Bootstrap()
         {
             Stats = new StatCollection(_statsDefinitionsTable);
-            Inventory = new InventoryRuntime(Stats);
+            Inventory = new InventoryGridRuntime(this);
             Effects = new EffectSystem(Stats);
 
             foreach (var pair in _statsDefinitionsTable.Rows)

@@ -6,6 +6,10 @@ using UnityEngine.EventSystems;
 using UnityEditor.SceneManagement;
 using System;
 
+// Draggable UI widget that exists within UI canvas space
+// * sends calls to UI widgets that can handle drop events
+// * is used for moving items between UI widgets only (for now,
+//   maybe will add 'drop-into-world' logic later)
 public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Image inventoryItemImage;
@@ -32,15 +36,16 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         Debug.Log("End UI drag");
 
-        bool isUIHit = SendRaycastUICheck(eventData);
-        if (isUIHit)
-        {
-            OnUIDrop();
-        }
-        else
-        {
-            OnDroppedOutsideCanvas?.Invoke(eventData);
-        }
+        OnUIDrop();
+        //bool isUIHit = SendRaycastUICheck(eventData);
+        //if (isUIHit)
+        //{
+        //    OnUIDrop();
+        //}
+        //else
+        //{
+        //    OnDroppedOutsideCanvas?.Invoke(eventData);
+        //}
     }
 
     public void OnUIPick(Image dragImage)

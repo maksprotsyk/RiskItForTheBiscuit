@@ -1,26 +1,46 @@
 ﻿using System.Collections.Generic;
 using Items;
 using UnityEngine;
+using System;
 
 namespace Characters.Inventory
 {
+    // Bridge-class between core inventory logic and UI
+    // * used to propagate calls of UI events (drag/drop)
     public class InventoryComponent : MonoBehaviour
     {
-        [SerializeField] private List<ItemDefinition> _startingItems = new();
-        private InventoryRuntime _runtime;
+        private InventoryGridRuntime _runtime;
 
-        public InventoryRuntime Runtime => _runtime;
+        public event Action OnChanged; // expose to UI if you want to subscribe directly
 
-        private void Start()
+        private void Awake()
         {
-            var statsHub = GetComponent<CharacterStatsHub>();
-            _runtime = new InventoryRuntime(statsHub.Stats);
+            var hub = GetComponent<CharacterStatsHub>();
+            if (!hub) { Debug.LogError("InventoryComponent requires CharacterStatsHub."); return; }
 
-            foreach (var item in _startingItems)
-                _runtime.Equip(item);
+            _runtime = new InventoryGridRuntime(hub);
+            _runtime.OnChanged += () => OnChanged?.Invoke();
         }
 
-        public void Equip(ItemDefinition item) => _runtime.Equip(item);
-        public void Unequip(ItemDefinition item) => _runtime.Unequip(item);
+        // -------- UI entry points --------
+        public bool UI_IsValidSlot(ItemDefinition item, int row, int col) => _runtime.IsValidSlot(item, row, col);
+
+        /// <summary>UI calls when dropping an item from the world into a grid cell.</summary>
+        public bool UI_TryPlace(ItemDefinition item, int row, int col) => _runtime.TryPlace(item, row, col);
+
+        /// <summary>UI calls when dragging an item from one cell to another.</summary>
+        public bool UI_TryMove(int fromRow, int fromCol, int toRow, int toCol) => _runtime.TryMove(fromRow, fromCol, toRow, toCol);
+
+        /// <summary>UI calls when removing an item (e.g., dropping back to world or discarding).</summary>
+        public bool UI_TryRemove(int row, int col) => _runtime.TryRemove(row, col);
+
+        /// <summary>UI calls on RMB to consume (timed boost). Returns true if consumed.</summary>
+        public bool UI_TryConsume(int row, int col) => _runtime.TryConsume(row, col);
+
+        /// <summary>UI asks for the current grid to render.</summary>
+        public IReadOnlyList<(int row, int col, ItemDefinition item)> UI_Snapshot() => _runtime.Snapshot();
+
+        /// <summary>UI helper to read one cell.</summary>
+        public ItemDefinition UI_Get(int row, int col) => _runtime.Get(row, col);
     }
 }
