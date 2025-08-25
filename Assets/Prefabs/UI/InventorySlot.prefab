@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4521510507735797017}
   - component: {fileID: 662021856191679723}
   - component: {fileID: 7573284284389550033}
-  - component: {fileID: 2318025736076261433}
+  - component: {fileID: 8173193517328202558}
   m_Layer: 5
   m_Name: InventorySlot
   m_TagString: Untagged
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &2318025736076261433
+--- !u!114 &8173193517328202558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
-    public void OnDrop(UnityEngine.EventSystems.PointerEventData eventData)
+    public void OnDrop(PointerEventData eventData)
     {
         GameObject droppedObject = eventData.pointerDrag;
         DraggableUIItem draggableItem = droppedObject.GetComponent<DraggableUIItem>();
