@@ -1,5 +1,6 @@
 using System;
 using Characters.Stats;
+using DataStorage.Generated;
 using UnityEngine;
 
 namespace Characters
@@ -31,11 +32,11 @@ namespace Characters
             if (_statsHub) _statsHub.Stats.OnStatChanged -= OnStatChanged;
         }
 
-        private float MaxHealth => _statsHub.Stats.Get(_statsHub.MaxHealth);
-        private float MaxArmor => _statsHub.Stats.Get(_statsHub.MaxArmor);
-        private float RegenRate => _statsHub.Stats.Get(_statsHub.HealthRegenRate);
-        private float DelayBeforeRegen => _statsHub.Stats.Get(_statsHub.DelayBeforeRegen);
-        private float InvulnDuration => _statsHub.Stats.Get(_statsHub.InvulnerabilityDuration);
+        private float MaxHealth => _statsHub.Stats.Get(StatsDef.MaxHealth);
+        private float MaxArmor => _statsHub.Stats.Get(StatsDef.MaxArmor);
+        private float RegenRate => _statsHub.Stats.Get(StatsDef.HealthRegenRate);
+        private float DelayBeforeRegen => _statsHub.Stats.Get(StatsDef.DelayBeforeRegen);
+        private float InvulnDuration => _statsHub.Stats.Get(StatsDef.InvulnerabilityDuration);
 
         public void UpdateComponent(float dt)
         {
@@ -83,11 +84,11 @@ namespace Characters
             set => _invulnerabilityTimer = value ? InvulnDuration : 0f;
         }
 
-        private void OnStatChanged(StatDefinition s)
+        private void OnStatChanged(StatsDef stat)
         {
-            if (s == _statsHub.MaxHealth)
+            if (stat == StatsDef.MaxHealth)
                 _currentHealth = Mathf.Min(_currentHealth, MaxHealth);
-            if (s == _statsHub.MaxArmor)
+            if (stat == StatsDef.MaxArmor)
                 _currentArmor = Mathf.Min(_currentArmor, MaxArmor);
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using Characters.Stats;
+using DataStorage.Generated;
 using UnityEngine;
 
 namespace Characters
@@ -134,16 +135,16 @@ namespace Characters
                 _currentState = MovingState.Idle;
         }
 
-        private void OnStatChanged(StatDefinition stat)
+        private void OnStatChanged(StatsDef stat)
         {
             // react only to relevant movement stats
-            if (stat == _statsHub.MoveSpeed ||
-                stat == _statsHub.RunSpeed ||
-                stat == _statsHub.StaminaTotal ||
-                stat == _statsHub.StaminaRegenRate ||
-                stat == _statsHub.StaminaWalkRegenRate ||
-                stat == _statsHub.StaminaDepletionRate ||
-                stat == _statsHub.StaminaDepletionThreshold)
+            if (stat == StatsDef.MoveSpeed ||
+                stat == StatsDef.RunSpeed ||
+                stat == StatsDef.StaminaTotal ||
+                stat == StatsDef.StaminaRegenRate ||
+                stat == StatsDef.StaminaWalkRegenRate ||
+                stat == StatsDef.StaminaDepletionRate ||
+                stat == StatsDef.StaminaDepletionThreshold)
             {
                 var prevTotal = _staminaTotal;
                 var prevStamina = Stamina;
@@ -164,13 +165,13 @@ namespace Characters
 
         private void RebuildCache()
         {
-            _walkSpeed = _statsHub.Stats.Get(_statsHub.MoveSpeed);
-            _runSpeed = _statsHub.Stats.Get(_statsHub.RunSpeed);
-            _staminaTotal = Mathf.Max(0f, _statsHub.Stats.Get(_statsHub.StaminaTotal));
-            _staminaRegenIdle = _statsHub.Stats.Get(_statsHub.StaminaRegenRate);
-            _staminaRegenWalk = _statsHub.Stats.Get(_statsHub.StaminaWalkRegenRate);
-            _staminaDepleteRun = Mathf.Max(0f, _statsHub.Stats.Get(_statsHub.StaminaDepletionRate));
-            _staminaDepletionThreshold = Mathf.Clamp(_statsHub.Stats.Get(_statsHub.StaminaDepletionThreshold), 0f, _staminaTotal);
+            _walkSpeed = _statsHub.Stats.Get(StatsDef.MoveSpeed);
+            _runSpeed = _statsHub.Stats.Get(StatsDef.RunSpeed);
+            _staminaTotal = Mathf.Max(0f, _statsHub.Stats.Get(StatsDef.StaminaTotal));
+            _staminaRegenIdle = _statsHub.Stats.Get(StatsDef.StaminaRegenRate);
+            _staminaRegenWalk = _statsHub.Stats.Get(StatsDef.StaminaWalkRegenRate);
+            _staminaDepleteRun = Mathf.Max(0f, _statsHub.Stats.Get(StatsDef.StaminaDepletionRate));
+            _staminaDepletionThreshold = Mathf.Clamp(_statsHub.Stats.Get(StatsDef.StaminaDepletionThreshold), 0f, _staminaTotal);
         }
 
         private static Vector2 CalculateAnimationDirection(Vector2 movementDirection)

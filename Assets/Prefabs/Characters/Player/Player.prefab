@@ -152,34 +152,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69febc6ecbf5472990b985d34b545e0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: {fileID: 11400000, guid: ecb1999e2a3f8fa478b9e3126a3e16c6, type: 2}
-  MaxArmor: {fileID: 11400000, guid: 8a6b36ebcf75c324c9421e0246e80e29, type: 2}
-  HealthRegenRate: {fileID: 11400000, guid: c94d9daa763a3f44dbd3118fe09f2bcf, type: 2}
-  DelayBeforeRegen: {fileID: 11400000, guid: 2d76e666fb4f7674b963d64ace220948, type: 2}
-  InvulnerabilityDuration: {fileID: 11400000, guid: 9f5ae1e2e18eefc4db5656c6eec2c5fc, type: 2}
-  Damage: {fileID: 11400000, guid: 2c6a24363c4513d41bcf5e895574d539, type: 2}
-  AttackCooldown: {fileID: 11400000, guid: dd880df14853e764c94055c9a99f80d5, type: 2}
-  MoveSpeed: {fileID: 11400000, guid: 32a74add584ea9f4bb66322770f688df, type: 2}
-  RunSpeed: {fileID: 11400000, guid: 71238d404b70f3046b81624a2c20022b, type: 2}
-  StaminaTotal: {fileID: 11400000, guid: 4e1f83a43642fdf4b9d3ac9fff3807d9, type: 2}
-  StaminaRegenRate: {fileID: 11400000, guid: 5fb4cd541b8e3734c829495c0944f641, type: 2}
-  StaminaWalkRegenRate: {fileID: 11400000, guid: ca54661e20ec10347ab60377ded7d58b, type: 2}
-  StaminaDepletionRate: {fileID: 11400000, guid: b5c02b8530265684495d0b3b2f42f9b5, type: 2}
-  StaminaDepletionThreshold: {fileID: 11400000, guid: 0640b14bbd008cc4cbda6dbcc30464fe, type: 2}
-  BaseMaxHealth: 100
-  BaseMaxArmor: 0
-  BaseHealthRegenRate: 0
-  BaseDelayBeforeRegen: 1
-  BaseInvulnerabilityDuration: 0.2
-  BaseDamage: 10
-  BaseAttackCooldown: 0.5
-  BaseMoveSpeed: 3.5
-  BaseRunSpeed: 6
-  BaseStaminaTotal: 100
-  BaseStaminaRegenRate: 10
-  BaseStaminaWalkRegenRate: 5
-  BaseStaminaDepletionRate: 20
-  BaseStaminaDepletionThreshold: 30
+  _statsDefinitionsTable: {fileID: 11400000, guid: db159834160e1bc45a891d795ceff623, type: 2}
+  _baseStatsOverrides:
+    _serializedList:
+    - Key:
+        _id: MaxHealth
+      Value: 100
+    - Key:
+        _id: MaxArmor
+      Value: 0
+    - Key:
+        _id: HealthRegenRate
+      Value: 1
+    - Key:
+        _id: DelayBeforeRegen
+      Value: 1
+    - Key:
+        _id: InvulnerabilityDuration
+      Value: 0.2
+    - Key:
+        _id: Damage
+      Value: 100
+    - Key:
+        _id: AttackCooldown
+      Value: 0.5
+    - Key:
+        _id: MoveSpeed
+      Value: 3.5
+    - Key:
+        _id: RunSpeed
+      Value: 6
+    - Key:
+        _id: StaminaTotal
+      Value: 100
+    - Key:
+        _id: StaminaRegenRate
+      Value: 10
+    - Key:
+        _id: StaminaWalkRegenRate
+      Value: 5
+    - Key:
+        _id: StaminaDepletionRate
+      Value: 20
+    - Key:
+        _id: StaminaDepletionThreshold
+      Value: 30
 --- !u!50 &4754068600239453809
 Rigidbody2D:
   serializedVersion: 4

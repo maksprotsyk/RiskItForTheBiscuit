@@ -1,21 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using DataStorage.Generated;
+using DataStorage;
 
 namespace Characters.Stats
 {
     public class StatCollection
     {
-        public event Action<StatDefinition> OnStatChanged;
+        public event Action<StatsDef> OnStatChanged;
+        
+        private IDataContainer<StatsTableRow> _statsDefinitionsTable;
 
-        private readonly Dictionary<StatDefinition, float> _baseValues = new();
-        private readonly Dictionary<StatDefinition, List<StatModifier>> _mods = new();
-        private readonly Dictionary<StatDefinition, float> _cache = new();
-        private readonly HashSet<StatDefinition> _dirty = new();
+        private readonly Dictionary<StatsDef, float> _baseValues = new();
+        private readonly Dictionary<StatsDef, List<StatModifier>> _mods = new();
+        private readonly Dictionary<StatsDef, float> _cache = new();
+        private readonly HashSet<StatsDef> _dirty = new();
 
-        public void SetBase(StatDefinition stat, float value)
+        public StatCollection(IDataContainer<StatsTableRow> statsDefinitionsTable)
         {
-            var v = stat.Clamp(value);
+            _statsDefinitionsTable = statsDefinitionsTable;
+        }
+
+        public void SetBase(StatsDef stat, float value)
+        {
+            if (!_statsDefinitionsTable.Get(stat, out var row))
+            {
+                Debug.LogError($"StatCollection: trying to set base value for unknown stat {stat}");
+                return;
+            }
+
+            var v = row.definition.Clamp(value);
             if (!_baseValues.TryGetValue(stat, out var cur) || !Mathf.Approximately(cur, v))
             {
                 _baseValues[stat] = v;
@@ -23,12 +38,25 @@ namespace Characters.Stats
             }
         }
 
-        public float Get(StatDefinition stat)
+        public float Get(StatsDef stat)
         {
             if (_dirty.Contains(stat))
+            {
                 Recalculate(stat);
-            if (_cache.TryGetValue(stat, out var v)) return v;
-            return stat.DefaultValue;
+            }
+
+            if (_cache.TryGetValue(stat, out var v))
+            {
+                return v;
+            }
+
+            if (_statsDefinitionsTable.Get(stat, out var row))
+            {
+                var statDef = row.definition;
+                return statDef.DefaultValue;
+            }
+
+            return 0.0f;
         }
 
         public void AddModifier(StatModifier mod)
@@ -45,7 +73,7 @@ namespace Characters.Stats
 
         public void RemoveAllFromSource(object source)
         {
-            var touched = new HashSet<StatDefinition>();
+            var touched = new HashSet<StatsDef>();
             foreach (var kv in _mods)
             {
                 int removed = kv.Value.RemoveAll(m => ReferenceEquals(m.Source, source));
@@ -54,15 +82,22 @@ namespace Characters.Stats
             foreach (var stat in touched) MarkDirty(stat);
         }
 
-        private void MarkDirty(StatDefinition stat)
+        private void MarkDirty(StatsDef stat)
         {
             _dirty.Add(stat);
         }
 
-        private void Recalculate(StatDefinition stat)
+        private void Recalculate(StatsDef stat)
         {
+            if (!_statsDefinitionsTable.Get(stat, out var row))
+            {
+                Debug.LogError($"StatCollection: trying to recalculate value for unknown stat {stat}");
+                return;
+            }
+
+            StatDefinition statDefinition = row.definition;
             _dirty.Remove(stat);
-            float baseVal = _baseValues.TryGetValue(stat, out var b) ? b : stat.DefaultValue;
+            float baseVal = _baseValues.TryGetValue(stat, out var b) ? b : statDefinition.DefaultValue;
 
             float flat = 0f;
             float percentAdd = 0f;
@@ -86,7 +121,7 @@ namespace Characters.Stats
             float result = (baseVal + flat) * (1f + percentAdd);
             result *= percentMult;
             result += finalAdd;
-            result = stat.Clamp(result);
+            result = statDefinition.Clamp(result);
 
             _cache[stat] = result;
             OnStatChanged?.Invoke(stat);

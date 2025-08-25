@@ -1,6 +1,7 @@
 using System;
 using AYellowpaper.SerializedCollections;
 using Characters.Stats;
+using DataStorage.Generated;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -129,13 +130,13 @@ namespace Characters
 
         private void RebuildCache()
         {
-            _damage = _statsHub.Stats.Get(_statsHub.Damage);
-            _cooldown = Mathf.Max(0f, _statsHub.Stats.Get(_statsHub.AttackCooldown));
+            _damage = _statsHub.Stats.Get(StatsDef.Damage);
+            _cooldown = Mathf.Max(0f, _statsHub.Stats.Get(StatsDef.AttackCooldown));
         }
 
-        private void OnStatChanged(StatDefinition stat)
+        private void OnStatChanged(StatsDef stat)
         {
-            if (stat == _statsHub.Damage || stat == _statsHub.AttackCooldown)
+            if (stat == StatsDef.Damage || stat == StatsDef.AttackCooldown)
                 RebuildCache();
         }
 

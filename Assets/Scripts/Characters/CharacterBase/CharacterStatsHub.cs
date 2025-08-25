@@ -3,49 +3,35 @@ using Characters.Effects;
 using Characters.Inventory;
 using Characters.Stats;
 using UnityEngine;
+using DataStorage;
+using DataStorage.Generated;
+using AYellowpaper.SerializedCollections;
 using Debug = UnityEngine.Debug;
 
 namespace Characters
 {
     public class CharacterStatsHub : MonoBehaviour
     {
-        [Header("Health Stats")]
-        public StatDefinition MaxHealth;
-        public StatDefinition MaxArmor;
-        public StatDefinition HealthRegenRate;
-        public StatDefinition DelayBeforeRegen;
-        public StatDefinition InvulnerabilityDuration;
+        [SerializeField] private IDataContainer<StatsTableRow> _statsDefinitionsTable;
 
-        [Header("Attack Stats")]
-        public StatDefinition Damage;
-        public StatDefinition AttackCooldown;
-
-        [Header("Movement Stats")]
-        public StatDefinition MoveSpeed; // walk
-        public StatDefinition RunSpeed; // run
-        public StatDefinition StaminaTotal;
-        public StatDefinition StaminaRegenRate; // idle
-        public StatDefinition StaminaWalkRegenRate; // walking
-        public StatDefinition StaminaDepletionRate; // running drain
-        public StatDefinition StaminaDepletionThreshold;
-
-        [Header("Base Values (authoring)")]
-        [Min(0)] public float BaseMaxHealth = 100f;
-        [Min(0)] public float BaseMaxArmor;
-        public float BaseHealthRegenRate = 1.0f;
-        public float BaseDelayBeforeRegen = 1.0f;
-        public float BaseInvulnerabilityDuration = 0.2f;
-
-        public float BaseDamage = 10f;
-        [Min(0)] public float BaseAttackCooldown = 0.5f;
-
-        [Min(0)] public float BaseMoveSpeed = 3.5f;
-        [Min(0)] public float BaseRunSpeed = 6.0f;
-        [Min(0)] public float BaseStaminaTotal = 100f;
-        public float BaseStaminaRegenRate = 10f; // idle
-        public float BaseStaminaWalkRegenRate = 5f; // walk
-        [Min(0)] public float BaseStaminaDepletionRate = 20f; // run drain
-        [Min(0)] public float BaseStaminaDepletionThreshold = 30f;
+        // set default values
+        [SerializeField] private SerializedDictionary<StatsDef, float> _baseStatsOverrides = new()
+        {
+            { StatsDef.MaxHealth, 100f },
+            { StatsDef.MaxArmor, 0f },
+            { StatsDef.HealthRegenRate, 1.0f },
+            { StatsDef.DelayBeforeRegen, 1.0f },
+            { StatsDef.InvulnerabilityDuration, 0.2f },
+            { StatsDef.Damage, 100f },
+            { StatsDef.AttackCooldown, 0.5f },
+            { StatsDef.MoveSpeed, 3.5f },
+            { StatsDef.RunSpeed, 6.0f },
+            { StatsDef.StaminaTotal, 100f },
+            { StatsDef.StaminaRegenRate, 10f },
+            { StatsDef.StaminaWalkRegenRate, 5f },
+            { StatsDef.StaminaDepletionRate, 20f },
+            { StatsDef.StaminaDepletionThreshold, 30f }
+        };
 
         // Core systems
         public StatCollection Stats { get; private set; }
@@ -63,10 +49,6 @@ namespace Characters
 
         private void Awake()
         {
-            // Validate early in Editor/Dev builds
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            ValidateStatAssets();
-#endif
 
             Bootstrap();
         }
@@ -81,69 +63,32 @@ namespace Characters
         /// </summary>
         public void Bootstrap()
         {
-            Stats = new StatCollection();
+            Stats = new StatCollection(_statsDefinitionsTable);
             Inventory = new InventoryRuntime(Stats);
             Effects = new EffectSystem(Stats);
 
-            // Health
-            Stats.SetBase(MaxHealth, BaseMaxHealth);
-            Stats.SetBase(MaxArmor, BaseMaxArmor);
-            Stats.SetBase(HealthRegenRate, BaseHealthRegenRate);
-            Stats.SetBase(DelayBeforeRegen, BaseDelayBeforeRegen);
-            Stats.SetBase(InvulnerabilityDuration, BaseInvulnerabilityDuration);
-
-            // Attack
-            Stats.SetBase(Damage, BaseDamage);
-            Stats.SetBase(AttackCooldown, BaseAttackCooldown);
-
-            // Movement + Stamina
-            Stats.SetBase(MoveSpeed, BaseMoveSpeed);
-            Stats.SetBase(RunSpeed, BaseRunSpeed);
-            Stats.SetBase(StaminaTotal, BaseStaminaTotal);
-            Stats.SetBase(StaminaRegenRate, BaseStaminaRegenRate);
-            Stats.SetBase(StaminaWalkRegenRate, BaseStaminaWalkRegenRate);
-            Stats.SetBase(StaminaDepletionRate, BaseStaminaDepletionRate);
-            Stats.SetBase(StaminaDepletionThreshold, BaseStaminaDepletionThreshold);
+            foreach (var pair in _statsDefinitionsTable.Rows)
+            {
+                StatsDef stat = new(pair.Key.ToString());
+                if (_baseStatsOverrides.TryGetValue(stat, out var v))
+                {
+                    Stats.SetBase(stat, v);
+                }
+            }
         }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            // Keep thresholds sane in the editor
-            if (BaseStaminaDepletionThreshold > BaseStaminaTotal)
-                BaseStaminaDepletionThreshold = Mathf.Max(0f, BaseStaminaTotal);
+            // keep stats sane in the editor
+            if (_baseStatsOverrides.TryGetValue(StatsDef.StaminaTotal, out float staminaTotal) &&
+                _baseStatsOverrides.TryGetValue(StatsDef.StaminaDepletionThreshold, out float staminaDepletionThreshold) &&
+                staminaDepletionThreshold > staminaTotal)
+            {
+                _baseStatsOverrides[StatsDef.StaminaDepletionThreshold] = Mathf.Max(0.0f, staminaTotal);
+            }
         }
 #endif
 
-        [Conditional("UNITY_EDITOR")]
-        [Conditional("DEVELOPMENT_BUILD")]
-        private void ValidateStatAssets()
-        {
-            // Warn once per missing asset; keeps authoring safe
-            void Check(StatDefinition s, string name)
-            {
-                if (s == null) Debug.LogWarning($"[CharacterStatsHub] Missing StatDefinition: {name}", this);
-            }
-
-            // Health
-            Check(MaxHealth, nameof(MaxHealth));
-            Check(MaxArmor, nameof(MaxArmor));
-            Check(HealthRegenRate, nameof(HealthRegenRate));
-            Check(DelayBeforeRegen, nameof(DelayBeforeRegen));
-            Check(InvulnerabilityDuration, nameof(InvulnerabilityDuration));
-
-            // Attack
-            Check(Damage, nameof(Damage));
-            Check(AttackCooldown, nameof(AttackCooldown));
-
-            // Movement
-            Check(MoveSpeed, nameof(MoveSpeed));
-            Check(RunSpeed, nameof(RunSpeed));
-            Check(StaminaTotal, nameof(StaminaTotal));
-            Check(StaminaRegenRate, nameof(StaminaRegenRate));
-            Check(StaminaWalkRegenRate, nameof(StaminaWalkRegenRate));
-            Check(StaminaDepletionRate, nameof(StaminaDepletionRate));
-            Check(StaminaDepletionThreshold, nameof(StaminaDepletionThreshold));
-        }
     }
 }
