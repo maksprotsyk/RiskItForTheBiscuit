@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 4015687176000255276}
   - component: {fileID: 1219313007189014236}
   - component: {fileID: 3270046207440903201}
-  - component: {fileID: 7768166262174057808}
+  - component: {fileID: 4424913856681998245}
   m_Layer: 0
-  m_Name: SimpleEnemy
+  m_Name: GreenSlime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: -357543867
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2104707951, guid: 9fe134d86dc117a46a02e5b62dd69fa4, type: 3}
+  m_Sprite: {fileID: -842152884, guid: 3b13d5cc0852b424f8507e51206b9680, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,7 +101,7 @@ Animator:
   m_GameObject: {fileID: 3489518492760200362}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ec680a979513f6b43996f9be806ed61e, type: 2}
+  m_Controller: {fileID: 22100000, guid: c3400e8dddc9408408e0fac9dcb6a0a8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -161,16 +161,16 @@ MonoBehaviour:
       Value: 0.2
     - Key:
         _id: Damage
-      Value: 100
+      Value: 10
     - Key:
         _id: AttackCooldown
       Value: 0.5
     - Key:
         _id: MoveSpeed
-      Value: 3.5
+      Value: 2
     - Key:
         _id: RunSpeed
-      Value: 6
+      Value: 4
     - Key:
         _id: StaminaTotal
       Value: 100
@@ -265,8 +265,8 @@ MonoBehaviour:
     - rid: 4687103181009977347
       type: {class: AIChasingState, ns: Characters.AI, asm: Assembly-CSharp}
       data: 
---- !u!58 &7768166262174057808
-CircleCollider2D:
+--- !u!70 &4424913856681998245
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -297,6 +297,6 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.3}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Offset: {x: 0, y: 0.2}
+  m_Size: {x: 1.1, y: 0.7}
+  m_Direction: 1
