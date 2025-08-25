@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AC_GraveIdle
+  m_Controller: {fileID: 9100000, guid: ae2d27ba05bfe564d8dd89dd1662cf2c, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 0d6cfe90b39e56f419eb9c2103bebf2a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 932a00caee865a146bd0a1b6138089a5, type: 2}
