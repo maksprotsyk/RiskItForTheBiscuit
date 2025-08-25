@@ -21,17 +21,13 @@ namespace Characters.AI
 
         public override void OnEnter()
         {
-            // _character.Movement.CurrentSpeed should not be initially 0. TODO: maybe fix MovementComponent
-            _character.Movement.SetMovementDirection(Vector2.left);
             _character.Movement.SetRunningState(false);
-
-            _agent.speed = _character.Movement.CurrentSpeed;
             _agent.SetDestination(_playerTransform.position);
         }
 
         public override AIState OnUpdate(float deltaTime)
         {
-            _agent.speed = _character.Movement.CurrentSpeed;
+            _agent.speed = Mathf.Max(0.01f, _character.Movement.CurrentSpeed);
 
             if ((_playerTransform.position - _playerPosition).magnitude > float.Epsilon)
             {
