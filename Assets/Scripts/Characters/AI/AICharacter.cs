@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Characters.AI;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,35 +7,36 @@ namespace Characters.AI
     public class AICharacter : MonoBehaviour
     {
 
-        [SerializeReference] private IAIStateMachine m_stateMachine;
-        private CharacterBase m_character;
-        private NavMeshAgent m_agent;
+        [SerializeReference] private IAIStateMachine _stateMachine;
+        private CharacterBase _character;
+        private NavMeshAgent _agent;
         private void Awake()
         {
-            m_character = GetComponent<CharacterBase>();
-            m_agent = GetComponent<NavMeshAgent>();
-            m_agent.updatePosition = false;
-            m_agent.updateRotation = false;
+            _character = GetComponent<CharacterBase>();
+            _agent = GetComponent<NavMeshAgent>();
+            _agent.updatePosition = false;
+            _agent.updateRotation = false;
+            _agent.updateUpAxis = false;
         }
 
         private void Start()
         {
-            m_stateMachine.Init(m_character, m_agent);
+            _stateMachine.Init(_character, _agent);
         }
 
         private void Update()
         {
-            m_stateMachine.Update(Time.deltaTime);
+            _stateMachine.Update(Time.deltaTime);
 
         }
         private void LateUpdate()
         {
-            m_agent.nextPosition = transform.position;
+            _agent.nextPosition = transform.position;
         }
 
         private void Reset()
         {
-            m_stateMachine = new AIStateMachine();
+            _stateMachine = new AIStateMachine();
         }
     }
 }

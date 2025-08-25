@@ -6,7 +6,7 @@ namespace UI
 {
     public class BaseUIWindow : MonoBehaviour, IUIWindow
     {
-        private UIManager m_uiManager;
+        private UIManager _uiManager;
 
         public virtual void Init(object data)
         {
@@ -28,15 +28,15 @@ namespace UI
         {
             get
             {
-                if (m_uiManager == null)
+                if (_uiManager == null)
                 {
-                    m_uiManager = ManagersOwner.GetManager<UIManager>();
-                    if (m_uiManager == null)
+                    _uiManager = ManagersOwner.GetManager<UIManager>();
+                    if (_uiManager == null)
                     {
                         Debug.LogError($"Managers owner doesn't contain {nameof(UIManager)}");
                     }
                 }
-                return m_uiManager;
+                return _uiManager;
             }
         }
     }

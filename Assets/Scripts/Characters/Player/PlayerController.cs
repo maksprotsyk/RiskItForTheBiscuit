@@ -2,16 +2,16 @@ using UnityEngine;
 
 namespace Characters.Player
 {
+    [RequireComponent(typeof(CharacterBase))]
     public class PlayerController : MonoBehaviour
     {
-
-        private InputReader m_inputReader;
-        private CharacterBase m_character;
+        private InputReader _inputReader;
+        private CharacterBase _character;
 
         private void Awake()
         {
-            m_inputReader = new InputReader();
-            m_character = GetComponentInChildren<CharacterBase>();
+            _inputReader = new InputReader();
+            _character = GetComponent<CharacterBase>();
 
 			AddListeners();
         }
@@ -29,39 +29,18 @@ namespace Characters.Player
         {
             RemoveListeners();
 
-            m_inputReader.MoveEvent += SetMovementDirection;
-            m_inputReader.AttackStartedEvent += OnAttackStarted;
-            m_inputReader.AttackCanceledEvent += OnAttackCanceled;
-        }
-
-        ///////////////////////////////////////////////////////
-        
-        private void SetMovementDirection(Vector2 i_direction)
-        {
-
-        }
-
-        ///////////////////////////////////////////////////////
-
-        private void OnAttackStarted()
-        {
-
-        }
-
-        ///////////////////////////////////////////////////////
-        
-        private void OnAttackCanceled()
-        {
-
+            _inputReader.MoveEvent += _character.Movement.SetMovementDirection;
+            _inputReader.AttackEvent += _character.Attack.PerformAttack;
+            _inputReader.RunningState += _character.Movement.SetRunningState;
         }
 
         ///////////////////////////////////////////////////////
         
         private void RemoveListeners()
         {
-            m_inputReader.MoveEvent -= SetMovementDirection;
-            m_inputReader.AttackStartedEvent -= OnAttackStarted;
-            m_inputReader.AttackCanceledEvent -= OnAttackCanceled;
+            _inputReader.MoveEvent -= _character.Movement.SetMovementDirection;
+            _inputReader.AttackEvent -= _character.Attack.PerformAttack;
+            _inputReader.RunningState -= _character.Movement.SetRunningState;
         }
 		
 		///////////////////////////////////////////////////////

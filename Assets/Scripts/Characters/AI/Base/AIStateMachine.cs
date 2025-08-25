@@ -8,43 +8,43 @@ namespace Characters.AI
     [System.Serializable]
     public class AIStateMachine: IAIStateMachine
     {
-        [SerializeField] protected SerializedDictionary<AIState, AIStateWrapper> m_statesLogic;
-        [SerializeField] protected AIState m_initialState;
+        [SerializeField] protected SerializedDictionary<AIState, AIStateWrapper> _statesLogic;
+        [SerializeField] protected AIState _initialState;
 
-        protected AIState m_state;
+        protected AIState _state;
 
         public AIState State
         {
-            get => m_state;
+            get => _state;
             set
             {
-                if (value == m_state)
+                if (value == _state)
                 {
                     return;
                 }
 
-                m_statesLogic[m_state].StateLogic.OnExit();
-                m_state = value;
-                m_statesLogic[m_state].StateLogic.OnEnter();
+                _statesLogic[_state].StateLogic.OnExit();
+                _state = value;
+                _statesLogic[_state].StateLogic.OnEnter();
 
                 //Debug.Log($"Entered state: {m_state}");
             }
         }
         public void Init(CharacterBase i_character, NavMeshAgent i_agent)
         {
-            foreach (var p in m_statesLogic)
+            foreach (var p in _statesLogic)
             {
                 AIStateWrapper stateLogic = p.Value;
                 AIState state = p.Key;
                 stateLogic.StateLogic.Init(state, i_character, i_agent);
             }
-            m_state = m_initialState;
-            m_statesLogic[m_initialState].StateLogic.OnEnter();
+            _state = _initialState;
+            _statesLogic[_initialState].StateLogic.OnEnter();
         }
 
         public void Update(float dt)
         {
-            AIState newState = m_statesLogic[m_state].StateLogic.OnUpdate(dt);
+            AIState newState = _statesLogic[_state].StateLogic.OnUpdate(dt);
             State = newState;
         }
 
