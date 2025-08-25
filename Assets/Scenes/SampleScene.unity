@@ -1402,6 +1402,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 907764984344197224, guid: 407e4a82a86798e418a4ac459663f4b7, type: 3}
   m_PrefabInstance: {fileID: 957434259}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1108377823 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1862343508395873858, guid: 5090e8562a9d96546989203db988dfd7, type: 3}
+  m_PrefabInstance: {fileID: 6710045912650637767}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1154320540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1566,6 +1571,46 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7528987784568178414, guid: 5090e8562a9d96546989203db988dfd7, type: 3}
   m_PrefabInstance: {fileID: 6710045912650637767}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1648840907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108377823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69febc6ecbf5472990b985d34b545e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: {fileID: 11400000, guid: ecb1999e2a3f8fa478b9e3126a3e16c6, type: 2}
+  MaxArmor: {fileID: 11400000, guid: 8a6b36ebcf75c324c9421e0246e80e29, type: 2}
+  HealthRegenRate: {fileID: 11400000, guid: c94d9daa763a3f44dbd3118fe09f2bcf, type: 2}
+  DelayBeforeRegen: {fileID: 11400000, guid: 2d76e666fb4f7674b963d64ace220948, type: 2}
+  InvulnerabilityDuration: {fileID: 11400000, guid: 9f5ae1e2e18eefc4db5656c6eec2c5fc, type: 2}
+  Damage: {fileID: 11400000, guid: 2c6a24363c4513d41bcf5e895574d539, type: 2}
+  AttackCooldown: {fileID: 11400000, guid: dd880df14853e764c94055c9a99f80d5, type: 2}
+  MoveSpeed: {fileID: 11400000, guid: 32a74add584ea9f4bb66322770f688df, type: 2}
+  RunSpeed: {fileID: 11400000, guid: 71238d404b70f3046b81624a2c20022b, type: 2}
+  StaminaTotal: {fileID: 11400000, guid: 4e1f83a43642fdf4b9d3ac9fff3807d9, type: 2}
+  StaminaRegenRate: {fileID: 11400000, guid: 5fb4cd541b8e3734c829495c0944f641, type: 2}
+  StaminaWalkRegenRate: {fileID: 11400000, guid: ca54661e20ec10347ab60377ded7d58b, type: 2}
+  StaminaDepletionRate: {fileID: 11400000, guid: b5c02b8530265684495d0b3b2f42f9b5, type: 2}
+  StaminaDepletionThreshold: {fileID: 11400000, guid: 0640b14bbd008cc4cbda6dbcc30464fe, type: 2}
+  BaseMaxHealth: 100
+  BaseMaxArmor: 0
+  BaseHealthRegenRate: 0
+  BaseDelayBeforeRegen: 1
+  BaseInvulnerabilityDuration: 0.2
+  BaseDamage: 10
+  BaseAttackCooldown: 0.5
+  BaseMoveSpeed: 3.5
+  BaseRunSpeed: 6
+  BaseStaminaTotal: 100
+  BaseStaminaRegenRate: 10
+  BaseStaminaWalkRegenRate: 5
+  BaseStaminaDepletionRate: 20
+  BaseStaminaDepletionThreshold: 30
 --- !u!1001 &1654583707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2163,7 +2208,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1862343508395873858, guid: 5090e8562a9d96546989203db988dfd7, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 1648840907}
   m_SourcePrefab: {fileID: 100100000, guid: 5090e8562a9d96546989203db988dfd7, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

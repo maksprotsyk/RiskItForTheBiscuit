@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
 
@@ -12,30 +13,12 @@ namespace DataStorage
 
         public override IEnumerable<KeyValuePair<TableID, T>> Rows
         {
-            get
-            {
-                foreach (var table in _tables)
-                {
-                    foreach (var row in table.Rows)
-                    {
-                        yield return row;
-                    }
-                }
-            }
+            get { return _tables.SelectMany(table => table.Rows); }
         }
 
         public override IEnumerable<TableID> Identifiers
         {
-            get
-            {
-                foreach (var table in _tables)
-                {
-                    foreach (var id in table.Identifiers)
-                    {
-                        yield return id;
-                    }
-                }
-            }
+            get { return _tables.SelectMany(table => table.Identifiers); }
         }
 
         public override bool Get(TableID id, out T row)

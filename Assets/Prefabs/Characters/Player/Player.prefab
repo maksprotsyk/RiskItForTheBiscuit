@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7317406595950021294}
   - component: {fileID: 5060946031030673859}
   - component: {fileID: 7438146934732196745}
+  - component: {fileID: 406937543835212751}
   - component: {fileID: 4754068600239453809}
   - component: {fileID: 24726243145386019}
   m_Layer: 0
@@ -134,26 +135,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7cdcff3938ec0046b0d9c85c520c052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementComponent:
-    _movementParameters:
-      MovementSpeed: 2
-      RunningSpeed: 3
-      StaminaTotalAmount: 100
-      StaminaRegenRate: 20
-      StaminaWalkRegenRate: 10
-      StaminaDepletionRate: 15
-      StaminaDepletionThreshold: 15
   _attackComponent:
-    _attackParameters:
-      Damage: 0
-      AttackCooldown: 0
-  _healthComponent:
-    _healthParameters:
-      MaxHealth: 0
-      MaxArmor: 0
-      DelayBeforeRegen: 0
-      HealthRegenRate: 0
-      InvulnerabilityDuration: 0
+    _attackProjectiles:
+      _serializedList: []
+--- !u!114 &406937543835212751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862343508395873858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69febc6ecbf5472990b985d34b545e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: {fileID: 11400000, guid: ecb1999e2a3f8fa478b9e3126a3e16c6, type: 2}
+  MaxArmor: {fileID: 11400000, guid: 8a6b36ebcf75c324c9421e0246e80e29, type: 2}
+  HealthRegenRate: {fileID: 11400000, guid: c94d9daa763a3f44dbd3118fe09f2bcf, type: 2}
+  DelayBeforeRegen: {fileID: 11400000, guid: 2d76e666fb4f7674b963d64ace220948, type: 2}
+  InvulnerabilityDuration: {fileID: 11400000, guid: 9f5ae1e2e18eefc4db5656c6eec2c5fc, type: 2}
+  Damage: {fileID: 11400000, guid: 2c6a24363c4513d41bcf5e895574d539, type: 2}
+  AttackCooldown: {fileID: 11400000, guid: dd880df14853e764c94055c9a99f80d5, type: 2}
+  MoveSpeed: {fileID: 11400000, guid: 32a74add584ea9f4bb66322770f688df, type: 2}
+  RunSpeed: {fileID: 11400000, guid: 71238d404b70f3046b81624a2c20022b, type: 2}
+  StaminaTotal: {fileID: 11400000, guid: 4e1f83a43642fdf4b9d3ac9fff3807d9, type: 2}
+  StaminaRegenRate: {fileID: 11400000, guid: 5fb4cd541b8e3734c829495c0944f641, type: 2}
+  StaminaWalkRegenRate: {fileID: 11400000, guid: ca54661e20ec10347ab60377ded7d58b, type: 2}
+  StaminaDepletionRate: {fileID: 11400000, guid: b5c02b8530265684495d0b3b2f42f9b5, type: 2}
+  StaminaDepletionThreshold: {fileID: 11400000, guid: 0640b14bbd008cc4cbda6dbcc30464fe, type: 2}
+  BaseMaxHealth: 100
+  BaseMaxArmor: 0
+  BaseHealthRegenRate: 0
+  BaseDelayBeforeRegen: 1
+  BaseInvulnerabilityDuration: 0.2
+  BaseDamage: 10
+  BaseAttackCooldown: 0.5
+  BaseMoveSpeed: 3.5
+  BaseRunSpeed: 6
+  BaseStaminaTotal: 100
+  BaseStaminaRegenRate: 10
+  BaseStaminaWalkRegenRate: 5
+  BaseStaminaDepletionRate: 20
+  BaseStaminaDepletionThreshold: 30
 --- !u!50 &4754068600239453809
 Rigidbody2D:
   serializedVersion: 4
