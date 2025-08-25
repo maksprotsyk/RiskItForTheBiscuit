@@ -30,7 +30,7 @@ namespace Characters
         [SerializeField] private MovementParameters _movementParameters;
 
         private Rigidbody2D _rigidBody;
-        private CharacterAnimationController _animationController;
+        private CharacterBase _character;
 
         private Dictionary<MovingState, float> _statesSpeed;
         private Dictionary<MovingState, float> _statesStaminaChangeRate;
@@ -40,6 +40,7 @@ namespace Characters
         private float _currentStamina;
         private bool _isRunningRequested;
         private bool _isDepleted;
+        private bool _isMoving;
 
         public float Stamina
         {
@@ -69,15 +70,27 @@ namespace Characters
             }
         }
 
+        public Vector2 MovementDirection
+        {
+            get
+            {
+                return _movementDirection;
+            }
+        }
+
         public void SetMovementDirection(Vector2 direction)
         {
-            _movementDirection = direction;
+            _isMoving = direction.magnitude > 0;
 
             // does not update rotation if the character is still
-            if (_movementDirection.magnitude > 0)
+            if (_isMoving)
             {
-                _animationController.SetParameter(AnimationParameters.LookX, direction.x);
-                _animationController.SetParameter(AnimationParameters.LookY, direction.y);
+                _movementDirection = direction;
+
+                Vector2 animationDirection = CalculateAnimationDirection(direction);
+                _character.AnimationController.SetParameter(AnimationParameters.LookX, animationDirection.x);
+                _character.AnimationController.SetParameter(AnimationParameters.LookY, animationDirection.y);
+                _character.Attack.SetAttackDirection(animationDirection);
             }
             UpdateMovingState();
         }
@@ -91,13 +104,14 @@ namespace Characters
         public void Init(CharacterBase characterBase)
         {
             _rigidBody = characterBase.GetComponent<Rigidbody2D>();
-            _animationController = characterBase.AnimationController;
+            _character = characterBase;
 
             _currentState = MovingState.Idle;
             _currentStamina = _movementParameters.StaminaTotalAmount;
             _movementDirection = Vector2.zero;
             _isRunningRequested = false;
             _isDepleted = false;
+            _isMoving = false;
 
             _statesSpeed = new Dictionary<MovingState, float>
             {
@@ -118,7 +132,7 @@ namespace Characters
         {
             UpdateMovingState();
 
-            _animationController.SetParameter(AnimationParameters.MovingState, (int)_currentState);
+            _character.AnimationController.SetParameter(AnimationParameters.MovingState, (int)_currentState);
             Stamina += _statesStaminaChangeRate[_currentState] * deltaTime;
         }
 
@@ -133,13 +147,25 @@ namespace Characters
             {
                 _currentState = MovingState.Running;
             }
-            else if (_movementDirection.magnitude > 0)
+            else if (_isMoving)
             {
                 _currentState = MovingState.Walking;
             }
             else
             {
                 _currentState = MovingState.Idle;
+            }
+        }
+
+        private static Vector2 CalculateAnimationDirection(Vector2 movementDirection)
+        {
+            if (Mathf.Abs(movementDirection.x) > Mathf.Abs(movementDirection.y))
+            {
+                return new Vector2(Mathf.Sign(movementDirection.x), 0);
+            }
+            else
+            {
+                return new Vector2(0, Mathf.Sign(movementDirection.y));
             }
         }
     }
