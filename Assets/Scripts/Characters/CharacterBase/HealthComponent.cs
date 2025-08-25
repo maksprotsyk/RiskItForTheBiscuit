@@ -26,6 +26,11 @@ namespace Characters
             _statsHub.Stats.OnStatChanged += OnStatChanged;
         }
 
+        public void OnDestroy()
+        {
+            if (_statsHub) _statsHub.Stats.OnStatChanged -= OnStatChanged;
+        }
+
         private float MaxHealth => _statsHub.Stats.Get(_statsHub.MaxHealth);
         private float MaxArmor => _statsHub.Stats.Get(_statsHub.MaxArmor);
         private float RegenRate => _statsHub.Stats.Get(_statsHub.HealthRegenRate);

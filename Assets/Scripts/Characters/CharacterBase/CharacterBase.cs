@@ -30,7 +30,7 @@ namespace Characters
         private void Awake()
         {
             Animator animator = GetComponent<Animator>();
-            if (animator == null)
+            if (!animator)
             {
                 Debug.LogError("Animator component is missing on the character.");
                 return;
@@ -41,6 +41,14 @@ namespace Characters
             foreach (ICharacterComponent comp in _characterComponents)
             {
                 comp.Init(this);
+            }
+        }
+        
+        public void OnDestroy()
+        {
+            foreach (ICharacterComponent comp in _characterComponents)
+            {
+                comp.OnDestroy();
             }
         }
 

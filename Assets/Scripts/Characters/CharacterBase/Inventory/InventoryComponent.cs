@@ -11,7 +11,7 @@ namespace Characters.Inventory
 
         public InventoryRuntime Runtime => _runtime;
 
-        private void Awake()
+        private void Start()
         {
             var statsHub = GetComponent<CharacterStatsHub>();
             _runtime = new InventoryRuntime(statsHub.Stats);
@@ -20,7 +20,6 @@ namespace Characters.Inventory
                 _runtime.Equip(item);
         }
 
-        // Unity-friendly API
         public void Equip(ItemDefinition item) => _runtime.Equip(item);
         public void Unequip(ItemDefinition item) => _runtime.Unequip(item);
     }

@@ -44,6 +44,11 @@ namespace Characters
             _cooldownTimer = 0f;
         }
 
+        public void OnDestroy()
+        {
+            if (_statsHub) _statsHub.Stats.OnStatChanged -= OnStatChanged;
+        }
+
         public void UpdateComponent(float deltaTime)
         {
             _cooldownTimer = Mathf.Max(0f, _cooldownTimer - deltaTime);

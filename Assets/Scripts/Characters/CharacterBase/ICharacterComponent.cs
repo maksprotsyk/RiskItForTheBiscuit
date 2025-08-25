@@ -8,6 +8,7 @@ namespace Characters
     public interface ICharacterComponent
     {
         public void Init(CharacterBase characterBase);
+        public void OnDestroy();
         public void UpdateComponent(float deltaTime);
         public void FixedUpdateComponent(float fixedDeltaTime);
     }

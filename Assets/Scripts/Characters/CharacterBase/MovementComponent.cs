@@ -7,7 +7,12 @@ namespace Characters
     [Serializable]
     public class MovementComponent : ICharacterComponent
     {
-        public enum MovingState { Idle = 0, Walking = 1, Running = 2 }
+        public enum MovingState
+        {
+            Idle = 0,
+            Walking = 1,
+            Running = 2
+        }
 
         private Rigidbody2D _rigidBody;
         private CharacterBase _character;
@@ -23,16 +28,20 @@ namespace Characters
         private float _staminaDepletionThreshold;
 
         private MovingState _currentState;
-        private Vector2 _movementDirection;
-        private float _currentStamina;
         private bool _isRunningRequested;
         private bool _isDepleted;
         private bool _isMoving;
 
-        public float Stamina => _currentStamina;
-        public float CurrentSpeed => _currentState == MovingState.Running ? _runSpeed :
-                                     _currentState == MovingState.Walking ? _walkSpeed : 0f;
-        public Vector2 MovementDirection => _movementDirection;
+        public float Stamina { get; private set; }
+
+        public float CurrentSpeed => _currentState switch
+        {
+            MovingState.Running => _runSpeed,
+            MovingState.Walking => _walkSpeed,
+            _ => 0f
+        };
+
+        public Vector2 MovementDirection { get; private set; }
 
         public void SetMovementDirection(Vector2 direction)
         {
@@ -40,15 +49,14 @@ namespace Characters
 
             if (_isMoving)
             {
-                _movementDirection = direction;
+                MovementDirection = direction.normalized;
 
-                Vector2 animDir = CalculateAnimationDirection(direction);
+                var animDir = CalculateAnimationDirection(direction);
                 _character.AnimationController.SetParameter(AnimationParameters.LookX, animDir.x);
                 _character.AnimationController.SetParameter(AnimationParameters.LookY, animDir.y);
-
-                // Keep attack facing in sync
                 _character.Attack.SetAttackDirection(animDir);
             }
+
             UpdateMovingState();
         }
 
@@ -62,21 +70,26 @@ namespace Characters
         {
             _character = characterBase;
             _rigidBody = characterBase.GetComponent<Rigidbody2D>();
-            if (_rigidBody == null) Debug.LogError("MovementComponent requires Rigidbody2D.", characterBase);
+            if (!_rigidBody) Debug.LogError("MovementComponent requires Rigidbody2D.", characterBase);
 
             _statsHub = characterBase.GetComponent<CharacterStatsHub>();
-            if (_statsHub == null) Debug.LogError("MovementComponent requires CharacterStatsHub.", characterBase);
+            if (!_statsHub) Debug.LogError("MovementComponent requires CharacterStatsHub.", characterBase);
 
             RebuildCache();
             _statsHub.Stats.OnStatChanged += OnStatChanged;
 
             _currentState = MovingState.Idle;
-            _movementDirection = Vector2.zero;
+            MovementDirection = Vector2.zero;
             _isRunningRequested = false;
             _isMoving = false;
             _isDepleted = false;
 
-            _currentStamina = _staminaTotal; // start full
+            Stamina = _staminaTotal; // start full
+        }
+
+        public void OnDestroy()
+        {
+            if (_statsHub) _statsHub.Stats.OnStatChanged -= OnStatChanged;
         }
 
         public void UpdateComponent(float deltaTime)
@@ -85,25 +98,30 @@ namespace Characters
 
             _character.AnimationController.SetParameter(AnimationParameters.MovingState, (int)_currentState);
 
-            float rate = _currentState switch
+            var rate = _currentState switch
             {
-                MovingState.Idle    => _staminaRegenIdle,
+                MovingState.Idle => _staminaRegenIdle,
                 MovingState.Walking => _staminaRegenWalk,
                 MovingState.Running => -_staminaDepleteRun,
                 _ => 0f
             };
 
-            _currentStamina = Mathf.Clamp(_currentStamina + rate * deltaTime, 0f, _staminaTotal);
+            Stamina = Mathf.Clamp(Stamina + rate * deltaTime, 0f, _staminaTotal);
 
-            // depletion gates running
-            if (_currentStamina <= 0f) _isDepleted = true;
-            else if (_currentStamina >= _staminaDepletionThreshold) _isDepleted = false;
+            if (Stamina <= 0f)
+            {
+                _isDepleted = true;
+            }
+            else if (Stamina >= _staminaDepletionThreshold)
+            {
+                _isDepleted = false;
+            }
         }
 
         public void FixedUpdateComponent(float fixedDeltaTime)
         {
-            if (_rigidBody == null) return;
-            _rigidBody.velocity = CurrentSpeed * _movementDirection;
+            if (!_rigidBody) return;
+            _rigidBody.velocity = CurrentSpeed * MovementDirection;
         }
 
         private void UpdateMovingState()
@@ -127,42 +145,39 @@ namespace Characters
                 stat == _statsHub.StaminaDepletionRate ||
                 stat == _statsHub.StaminaDepletionThreshold)
             {
-                float prevTotal = _staminaTotal;
-                float prevStamina = _currentStamina;
+                var prevTotal = _staminaTotal;
+                var prevStamina = Stamina;
 
                 RebuildCache();
 
                 // keep stamina ratio when max changes (feels good with buffs)
                 if (!Mathf.Approximately(prevTotal, _staminaTotal) && prevTotal > 0f)
                 {
-                    float ratio = Mathf.Clamp01(prevStamina / prevTotal);
-                    _currentStamina = ratio * _staminaTotal;
+                    var ratio = Mathf.Clamp01(prevStamina / prevTotal);
+                    Stamina = ratio * _staminaTotal;
                 }
 
                 // re-evaluate depletion immediately
-                _isDepleted = _currentStamina <= 0f
-                           || (_currentStamina < _staminaDepletionThreshold && _isDepleted);
+                _isDepleted = Stamina <= 0f || (Stamina < _staminaDepletionThreshold && _isDepleted);
             }
         }
 
         private void RebuildCache()
         {
-            _walkSpeed                 = _statsHub.Stats.Get(_statsHub.MoveSpeed);
-            _runSpeed                  = _statsHub.Stats.Get(_statsHub.RunSpeed);
-            _staminaTotal              = Mathf.Max(0f, _statsHub.Stats.Get(_statsHub.StaminaTotal));
-            _staminaRegenIdle          = _statsHub.Stats.Get(_statsHub.StaminaRegenRate);
-            _staminaRegenWalk          = _statsHub.Stats.Get(_statsHub.StaminaWalkRegenRate);
-            _staminaDepleteRun         = Mathf.Max(0f, _statsHub.Stats.Get(_statsHub.StaminaDepletionRate));
+            _walkSpeed = _statsHub.Stats.Get(_statsHub.MoveSpeed);
+            _runSpeed = _statsHub.Stats.Get(_statsHub.RunSpeed);
+            _staminaTotal = Mathf.Max(0f, _statsHub.Stats.Get(_statsHub.StaminaTotal));
+            _staminaRegenIdle = _statsHub.Stats.Get(_statsHub.StaminaRegenRate);
+            _staminaRegenWalk = _statsHub.Stats.Get(_statsHub.StaminaWalkRegenRate);
+            _staminaDepleteRun = Mathf.Max(0f, _statsHub.Stats.Get(_statsHub.StaminaDepletionRate));
             _staminaDepletionThreshold = Mathf.Clamp(_statsHub.Stats.Get(_statsHub.StaminaDepletionThreshold), 0f, _staminaTotal);
         }
 
         private static Vector2 CalculateAnimationDirection(Vector2 movementDirection)
         {
             // 4-dir snap for look/attack
-            if (Mathf.Abs(movementDirection.x) > Mathf.Abs(movementDirection.y))
-                return new Vector2(Mathf.Sign(movementDirection.x), 0);
-            else
-                return new Vector2(0, Mathf.Sign(movementDirection.y));
+            return Mathf.Abs(movementDirection.x) > Mathf.Abs(movementDirection.y) ? 
+                new Vector2(Mathf.Sign(movementDirection.x), 0) : new Vector2(0, Mathf.Sign(movementDirection.y));
         }
     }
 }
