@@ -29,6 +29,12 @@ namespace Characters
 
         private void Awake()
         {
+            CharacterStatsHub StatComp = GetComponent<CharacterStatsHub>();
+            if (StatComp)
+            {
+                StatComp.Init();
+            }
+
             Animator animator = GetComponent<Animator>();
             if (!animator)
             {

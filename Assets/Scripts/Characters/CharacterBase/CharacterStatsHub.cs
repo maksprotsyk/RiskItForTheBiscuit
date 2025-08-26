@@ -47,9 +47,8 @@ namespace Characters
             public const int FinalAdd = 400;
         }
 
-        private void Awake()
+        public void Init()
         {
-
             Bootstrap();
         }
 

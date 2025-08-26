@@ -15,6 +15,7 @@ namespace Characters.Inventory
 
         private void Awake()
         {
+            // TODO: Initialize CharacterStatsHub component properly after Inventory is added to every character
             var hub = GetComponent<CharacterStatsHub>();
             if (!hub) { Debug.LogError("InventoryComponent requires CharacterStatsHub."); return; }
 
