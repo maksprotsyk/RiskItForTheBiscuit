@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using UI;
 using UnityEngine;
 
+// A component for all objects that want to display a tooltip
+// * sends events to TooltipManager when mouse hover/leave
+// * takes ItemDefinition from a hovered item to show propper info
 public class ItemTooltip : MonoBehaviour
 {
     private TooltipManager tooltipManager;
@@ -22,8 +25,9 @@ public class ItemTooltip : MonoBehaviour
         return tooltipManager;
     }
 
-    private void OnMouseEnter()
+    public void OnMouseEnterHandle()
     {
+        // TODO: need to add ItemDefinition for UI items in Inventory
         PickupItem pickupComponent = GetComponent<PickupItem>();
         if(pickupComponent)
         {
@@ -32,7 +36,7 @@ public class ItemTooltip : MonoBehaviour
         }
     }
 
-    private void OnMouseExit()
+    public void OnMouseExitHandle()
     {
         GetTooltipManagerInstance().HideTooltip();
     }

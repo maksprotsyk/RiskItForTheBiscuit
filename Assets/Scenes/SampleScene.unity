@@ -1922,7 +1922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd02ee84ee0b42409b9907d71fd086b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipTitleText: {fileID: 1570445222}
+  TooltipTitleText: {fileID: 0}
 --- !u!1001 &1322517779
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3243,6 +3243,10 @@ PrefabInstance:
       value: InventorySystem
       objectReference: {fileID: 0}
     - target: {fileID: 2667543986959856868, guid: a7c85d7a2ea3c3a40829ac8f4e76bc35, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2667543986959856868, guid: a7c85d7a2ea3c3a40829ac8f4e76bc35, type: 3}
       propertyPath: _statsDefinitionsTable
       value: 
       objectReference: {fileID: 11400000, guid: db159834160e1bc45a891d795ceff623, type: 2}
@@ -3362,7 +3366,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7851523771855582926, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.1
+      value: 12.66
       objectReference: {fileID: 0}
     - target: {fileID: 7851523771855582926, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
       propertyPath: m_LocalPosition.y

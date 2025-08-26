@@ -61,7 +61,7 @@ public class DraggableObjectItem : MonoBehaviour
 
     void OnMouseDrag()
     {
-        Debug.Log("Dragging Object");
+        // Debug.Log("Dragging Object");
 
         if (dragIconRect != null)
         {

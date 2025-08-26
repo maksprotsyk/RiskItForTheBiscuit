@@ -4,11 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
+// Manager for all pickup item tooltips
+// * shows/hides tooltip when hovered over pickup element
+// * sets up tooltip info
+// * handles hover logic for mouse
 public class TooltipManager : MonoBehaviour
 {
     GameObject tooltip;
-    public TextMeshProUGUI tooltipTitleText;
+    public TextMeshProUGUI TooltipTitleText;
+
+    // Mouse hover logic variables
+    private Canvas canvas;
+    private LayerMask uiTargetLayer;
+    private LayerMask sceneTargetLayer;
+    private GraphicRaycaster raycaster;
+    private GameObject lastHoveredObject = null;
 
     public void SetAndShowTooltip(ItemDefinition itemDescription)
     {
@@ -21,9 +34,9 @@ public class TooltipManager : MonoBehaviour
         tooltip.transform.SetAsLastSibling();
 
         // Set tooltip info about object
-        if (tooltipTitleText != null)
+        if (TooltipTitleText != null)
         {
-            tooltipTitleText.SetText(itemDescription.Kind.ToString());
+            TooltipTitleText.SetText(itemDescription.Kind.ToString());
         }
     }
 
@@ -38,6 +51,11 @@ public class TooltipManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        canvas = FindObjectOfType<Canvas>();
+        raycaster = canvas.GetComponent<GraphicRaycaster>();
+        uiTargetLayer = LayerMask.GetMask("Drag");
+        sceneTargetLayer = LayerMask.GetMask("Drag");
+
         tooltip = GameObject.Find("ItemTooltip");
         if (tooltip == null)
         {
@@ -56,7 +74,83 @@ public class TooltipManager : MonoBehaviour
         {
             tooltip.transform.position = Input.mousePosition;
         }
+
+        HandleMouseHover();
     }
 
+    void HandleMouseHover()
+    {
+        GameObject hoveredObject = null;
+        
+        // Check 2d scene objects
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0f;
+        RaycastHit2D hit2D = Physics2D.Raycast(mouseWorldPos, Vector2.zero, Mathf.Infinity, sceneTargetLayer);
+        if (hit2D.collider != null)
+        {
+            hoveredObject = hit2D.collider.gameObject;
+        }
+        else
+        {
+            // Check UI canvas objects
+            PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
+            {
+                position = Input.mousePosition
+            };
 
+            List<RaycastResult> results = new List<RaycastResult>();
+            raycaster.Raycast(pointerEventData, results);
+
+            foreach (var result in results)
+            {
+                if (((1 << result.gameObject.layer) & uiTargetLayer) != 0)
+                {
+                    hoveredObject = result.gameObject;
+                    break;
+                }
+            }
+        }
+
+        // Trigger enter/exit events
+        if (hoveredObject != lastHoveredObject)
+        {
+            if (lastHoveredObject != null)
+                OnMouseExitEvent(lastHoveredObject);
+
+            if (hoveredObject != null)
+                OnMouseEnterEvent(hoveredObject);
+
+            lastHoveredObject = hoveredObject;
+        }
+    }
+
+    void OnMouseEnterEvent(GameObject objectEntered)
+    {
+        if(!objectEntered)
+        {
+            return;
+        }
+
+        Debug.Log("Mouse entered: " + objectEntered.name);
+        ItemTooltip tooltipComp = objectEntered.GetComponent<ItemTooltip>();
+        if (tooltipComp)
+        {
+            tooltipComp.OnMouseEnterHandle();
+        }
+    }
+
+    void OnMouseExitEvent(GameObject objectExited)
+    {
+        if (!objectExited)
+        {
+            return;
+        }
+
+        Debug.Log("Mouse exited: " + objectExited.name);
+        ItemTooltip tooltipComp = objectExited.GetComponent<ItemTooltip>();
+        if (tooltipComp)
+        {
+            tooltipComp.OnMouseExitHandle();
+        }
+    }
 }

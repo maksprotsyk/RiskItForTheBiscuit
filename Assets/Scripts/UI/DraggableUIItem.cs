@@ -28,7 +28,7 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
-        Debug.Log("Dragging UI");
+        // Debug.Log("Dragging UI");
         transform.position = Input.mousePosition;
     }
 
