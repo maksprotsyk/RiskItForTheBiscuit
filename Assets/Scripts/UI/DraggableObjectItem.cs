@@ -16,7 +16,7 @@ public class DraggableObjectItem : MonoBehaviour
     private RectTransform dragIconRect;
     private bool isDragging = false;
 
-    void OnMouseDown()
+    public void OnMouseDownHandle()
     {
         Debug.Log("Begin Object drag");
         isDragging = true;
@@ -31,18 +31,7 @@ public class DraggableObjectItem : MonoBehaviour
         SetVisible(false);
     }
 
-    void OnMouseDrag()
-    {
-        if (isDragging)
-        {
-            Debug.Log("Dragging Object");
-
-            if (dragIconRect != null)
-                dragIconRect.position = Input.mousePosition;
-        }
-    }
-
-    void OnMouseUp()
+    public void OnMouseUpHandle()
     {
         Debug.Log("End Object drag");
 
@@ -61,6 +50,28 @@ public class DraggableObjectItem : MonoBehaviour
 
         isDragging = false;
     }
+
+    private void Update()
+    {
+        if (isDragging)
+        {
+            OnMouseDrag();
+        }
+    }
+
+    void OnMouseDrag()
+    {
+        Debug.Log("Dragging Object");
+
+        if (dragIconRect != null)
+        {
+            dragIconRect.position = Input.mousePosition;
+
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
+        }
+    }
+
 
     // Creates and inits an UI item from a scene object that we can
     // drag over inventory UI
