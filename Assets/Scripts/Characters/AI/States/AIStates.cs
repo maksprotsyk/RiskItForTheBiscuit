@@ -3,6 +3,7 @@ namespace Characters.AI
     public enum AIState
     {
         Idle,
-        Chasing
+        Chasing,
+        Attacking
     }
 }

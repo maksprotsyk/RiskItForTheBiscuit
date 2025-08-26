@@ -21,6 +21,7 @@ namespace Characters
 
         private CharacterBase _character;
         private CharacterStatsHub _statsHub;
+        private Collider2D _characterCollider;
 
         private GameObject _currentProjectile;
         private AttackType _currentAttackType;
@@ -37,6 +38,7 @@ namespace Characters
         {
             _character = characterBase;
             _statsHub = characterBase.GetComponent<CharacterStatsHub>();
+            _characterCollider = characterBase.GetComponent<Collider2D>();
             if (!_statsHub) Debug.LogError("AttackComponent requires CharacterStatsHub.", characterBase);
 
             RebuildCache();
@@ -70,16 +72,36 @@ namespace Characters
                 _attackDirection = attackDirection.normalized;
         }
 
+        public bool AttackIsReady()
+        {
+            if (_cooldownTimer > 0f) return false;
+
+            // block double-spawn for melee that keeps a child collider active until anim turns it off
+            if (_currentProjectile && _currentAttackType == AttackType.Sword) return false;
+
+            return true;
+        }
 
         public void PerformAttack()
         {
-            if (_cooldownTimer > 0f) return;
-
-            // block double-spawn for melee that keeps a child collider active until anim turns it off
-            if (_currentProjectile && _currentAttackType == AttackType.Sword) return;
+            if (!AttackIsReady())
+            {
+                return;
+            }
 
             _cooldownTimer = _cooldown;
             _character.AnimationController.SetTrigger(AnimationParameters.Attack);
+        }
+
+        public bool IsInAttackRange(CharacterBase otherCharacter)
+        {
+            Vector2 selfClosestPoint = _characterCollider.ClosestPoint(otherCharacter.transform.position);
+            Vector2 otherClosestPoint = otherCharacter.Attack._characterCollider.ClosestPoint(_character.transform.position);
+            Vector2 toOther = otherClosestPoint - selfClosestPoint;
+
+            // TODO: get attack distance from weapon
+            float attackDistance = 0.4f;
+            return toOther.sqrMagnitude < attackDistance;
         }
 
         /// <summary>
