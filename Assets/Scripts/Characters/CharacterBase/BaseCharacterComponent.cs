@@ -11,11 +11,11 @@ namespace Characters
         public virtual void Init(CharacterBase characterBase)
         {
             _character = characterBase;
-            AddListeners();
         }
 
         public virtual void OnStart()
         {
+            AddListeners();
         }
 
         public virtual void OnDestroy()
