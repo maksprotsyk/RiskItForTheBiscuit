@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4558230241540505735}
   - component: {fileID: 6861471061724952614}
   - component: {fileID: 1865335420907636781}
-  - component: {fileID: 2213338911650399594}
   - component: {fileID: 4015687176000255276}
   - component: {fileID: 1219313007189014236}
   - component: {fileID: 3270046207440903201}
@@ -129,63 +128,52 @@ MonoBehaviour:
       _serializedList:
       - Key: 0
         Value: {fileID: 7032444853151934704, guid: 00c17e477edd80346a038371adc26ac8, type: 3}
---- !u!114 &2213338911650399594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3489518492760200362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69febc6ecbf5472990b985d34b545e0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _statsDefinitionsTable: {fileID: 11400000, guid: db159834160e1bc45a891d795ceff623, type: 2}
-  _baseStatsOverrides:
-    _serializedList:
-    - Key:
-        _id: MaxHealth
-      Value: 100
-    - Key:
-        _id: MaxArmor
-      Value: 0
-    - Key:
-        _id: HealthRegenRate
-      Value: 1
-    - Key:
-        _id: DelayBeforeRegen
-      Value: 1
-    - Key:
-        _id: InvulnerabilityDuration
-      Value: 0.2
-    - Key:
-        _id: Damage
-      Value: 10
-    - Key:
-        _id: AttackCooldown
-      Value: 0.5
-    - Key:
-        _id: MoveSpeed
-      Value: 2
-    - Key:
-        _id: RunSpeed
-      Value: 4
-    - Key:
-        _id: StaminaTotal
-      Value: 100
-    - Key:
-        _id: StaminaRegenRate
-      Value: 10
-    - Key:
-        _id: StaminaWalkRegenRate
-      Value: 5
-    - Key:
-        _id: StaminaDepletionRate
-      Value: 20
-    - Key:
-        _id: StaminaDepletionThreshold
-      Value: 30
+  _statsHubComponent:
+    _statsDefinitionsTable: {fileID: 11400000, guid: db159834160e1bc45a891d795ceff623, type: 2}
+    _baseStatsOverrides:
+      _serializedList:
+      - Key:
+          _id: MaxHealth
+        Value: 100
+      - Key:
+          _id: MaxArmor
+        Value: 0
+      - Key:
+          _id: HealthRegenRate
+        Value: 1
+      - Key:
+          _id: DelayBeforeRegen
+        Value: 1
+      - Key:
+          _id: InvulnerabilityDuration
+        Value: 0.2
+      - Key:
+          _id: Damage
+        Value: 100
+      - Key:
+          _id: AttackCooldown
+        Value: 0.5
+      - Key:
+          _id: MoveSpeed
+        Value: 3.5
+      - Key:
+          _id: RunSpeed
+        Value: 6
+      - Key:
+          _id: StaminaTotal
+        Value: 100
+      - Key:
+          _id: StaminaRegenRate
+        Value: 10
+      - Key:
+          _id: StaminaWalkRegenRate
+        Value: 5
+      - Key:
+          _id: StaminaDepletionRate
+        Value: 20
+      - Key:
+          _id: StaminaDepletionThreshold
+        Value: 30
 --- !u!50 &4015687176000255276
 Rigidbody2D:
   serializedVersion: 4

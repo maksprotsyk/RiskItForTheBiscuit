@@ -8,6 +8,7 @@ namespace Characters
         [SerializeField] private MovementComponent _movementComponent;
         [SerializeField] private AttackComponent _attackComponent;
         [SerializeField] private HealthComponent _healthComponent;
+        [SerializeField] private CharacterStatsHub _statsHubComponent;
 
         private CharacterAnimationController _animationController;
         private List<ICharacterComponent> _characterComponents;
@@ -15,6 +16,8 @@ namespace Characters
         public MovementComponent Movement => _movementComponent;
         public AttackComponent Attack => _attackComponent;
         public HealthComponent Health => _healthComponent;
+        public CharacterStatsHub StatsHub => _statsHubComponent;
+
         public CharacterAnimationController AnimationController => _animationController;
 
         public void OnAttackAnimationStarted()
@@ -29,12 +32,6 @@ namespace Characters
 
         private void Awake()
         {
-            CharacterStatsHub StatComp = GetComponent<CharacterStatsHub>();
-            if (StatComp)
-            {
-                StatComp.Init();
-            }
-
             Animator animator = GetComponent<Animator>();
             if (!animator)
             {
@@ -43,13 +40,21 @@ namespace Characters
             }
             _animationController = new CharacterAnimationController(animator);
 
-            _characterComponents = new List<ICharacterComponent> { _movementComponent, _attackComponent, _healthComponent };
+            _characterComponents = new List<ICharacterComponent> { _statsHubComponent, _movementComponent, _attackComponent, _healthComponent };
             foreach (ICharacterComponent comp in _characterComponents)
             {
                 comp.Init(this);
             }
         }
-        
+
+        private void Start()
+        {
+            foreach (ICharacterComponent comp in _characterComponents)
+            {
+                comp.OnStart();
+            }
+        }
+
         public void OnDestroy()
         {
             foreach (ICharacterComponent comp in _characterComponents)

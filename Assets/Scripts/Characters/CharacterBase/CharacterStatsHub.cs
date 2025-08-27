@@ -6,11 +6,12 @@ using UnityEngine;
 using DataStorage;
 using DataStorage.Generated;
 using AYellowpaper.SerializedCollections;
-using Debug = UnityEngine.Debug;
+using System;
 
 namespace Characters
 {
-    public class CharacterStatsHub : MonoBehaviour
+    [Serializable]
+    public class CharacterStatsHub : BaseChracterComponent
     {
         [SerializeField] private IDataContainer<StatsTableRow> _statsDefinitionsTable;
 
@@ -47,20 +48,22 @@ namespace Characters
             public const int FinalAdd = 400;
         }
 
-        public void Init()
+        public override void Init(CharacterBase characterBase)
         {
+            base.Init(characterBase);
             Bootstrap();
         }
 
-        private void Update()
+        public override void UpdateComponent(float deltaTime)
         {
-            Effects.Tick(Time.deltaTime);
+            base.UpdateComponent(deltaTime);
+            Effects.Tick(deltaTime);
         }
 
         /// <summary>
         /// Initialize core systems and base stats; can be called manually if needed.
         /// </summary>
-        public void Bootstrap()
+        private void Bootstrap()
         {
             Stats = new StatCollection(_statsDefinitionsTable);
             Inventory = new InventoryGridRuntime(this);
@@ -75,19 +78,6 @@ namespace Characters
                 }
             }
         }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            // keep stats sane in the editor
-            if (_baseStatsOverrides.TryGetValue(StatsDef.StaminaTotal, out float staminaTotal) &&
-                _baseStatsOverrides.TryGetValue(StatsDef.StaminaDepletionThreshold, out float staminaDepletionThreshold) &&
-                staminaDepletionThreshold > staminaTotal)
-            {
-                _baseStatsOverrides[StatsDef.StaminaDepletionThreshold] = Mathf.Max(0.0f, staminaTotal);
-            }
-        }
-#endif
 
     }
 }
