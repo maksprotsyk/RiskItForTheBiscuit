@@ -80,6 +80,8 @@ namespace Characters
 
         public override void OnStart()
         {
+            base.OnStart();
+
             RebuildCache();
 
             // needs stats to be ready

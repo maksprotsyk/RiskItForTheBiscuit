@@ -20,19 +20,14 @@ namespace Characters
             base.Init(characterBase);
 
             _animationController = characterBase.AnimationController;
-
-            AddListeners();
         }
 
         public override void OnStart()
         {
+            base.OnStart();
+
             _currentHealth = MaxHealth; // start full
             _currentArmor = Mathf.Min(_currentArmor, MaxArmor);
-        }
-
-        public override void OnDestroy()
-        {
-            RemoveListeners();
         }
 
         private float MaxHealth => _character.StatsHub.Stats.Get(StatsDef.MaxHealth);
@@ -94,14 +89,14 @@ namespace Characters
                 _currentArmor = Mathf.Min(_currentArmor, MaxArmor);
         }
 
-        private void AddListeners()
+        protected override void AddListeners()
         {
             RemoveListeners();
 
             _character.StatsHub.Stats.OnStatChanged += OnStatChanged;
         }
 
-        private void RemoveListeners()
+        protected override void RemoveListeners()
         {
             _character.StatsHub.Stats.OnStatChanged -= OnStatChanged;
         }

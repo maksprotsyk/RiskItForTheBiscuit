@@ -46,6 +46,7 @@ namespace Characters
 
         public override void OnStart()
         {
+            base.OnStart();
             RebuildCache();
         }
 
