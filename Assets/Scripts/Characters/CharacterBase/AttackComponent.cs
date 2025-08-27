@@ -14,13 +14,11 @@ namespace Characters
     }
 
     [Serializable]
-    public class AttackComponent : ICharacterComponent
+    public class AttackComponent : BaseChracterComponent
     {
         [SerializeField] 
         private SerializedDictionary<AttackType, GameObject> _attackProjectiles;
 
-        private CharacterBase _character;
-        private CharacterStatsHub _statsHub;
         private Collider2D _characterCollider;
 
         private GameObject _currentProjectile;
@@ -34,16 +32,11 @@ namespace Characters
         private float _damage;
         private float _cooldown;
 
-        public void Init(CharacterBase characterBase)
+        public override void Init(CharacterBase characterBase)
         {
-            _character = characterBase;
-            _statsHub = characterBase.GetComponent<CharacterStatsHub>();
+            base.Init(characterBase);
+
             _characterCollider = characterBase.GetComponent<Collider2D>();
-            if (!_statsHub) Debug.LogError("AttackComponent requires CharacterStatsHub.", characterBase);
-
-            RebuildCache();
-            _statsHub.Stats.OnStatChanged += OnStatChanged;
-
             _currentAttackType = AttackType.Sword;
             _cooldownTimer = 0f;
 
@@ -51,18 +44,14 @@ namespace Characters
             _attackBaseOffset = spriteRenderer.bounds.center - characterBase.transform.position;
         }
 
-        public void OnDestroy()
+        public override void OnStart()
         {
-            if (_statsHub) _statsHub.Stats.OnStatChanged -= OnStatChanged;
+            RebuildCache();
         }
 
-        public void UpdateComponent(float deltaTime)
+        public override void UpdateComponent(float deltaTime)
         {
             _cooldownTimer = Mathf.Max(0f, _cooldownTimer - deltaTime);
-        }
-
-        public void FixedUpdateComponent(float fixedDeltaTime)
-        {
         }
 
         public void SetAttackDirection(Vector2 attackDirection)
@@ -149,11 +138,20 @@ namespace Characters
         }
 
         // ---------- internals ----------
+        protected override void AddListeners()
+        {
+            _character.StatsHub.Stats.OnStatChanged += OnStatChanged;
+        }
+
+        protected override void RemoveListeners()
+        {
+            _character.StatsHub.Stats.OnStatChanged -= OnStatChanged;
+        }
 
         private void RebuildCache()
         {
-            _damage = _statsHub.Stats.Get(StatsDef.Damage);
-            _cooldown = Mathf.Max(0f, _statsHub.Stats.Get(StatsDef.AttackCooldown));
+            _damage = _character.StatsHub.Stats.Get(StatsDef.Damage);
+            _cooldown = Mathf.Max(0f, _character.StatsHub.Stats.Get(StatsDef.AttackCooldown));
         }
 
         private void OnStatChanged(StatsDef stat)

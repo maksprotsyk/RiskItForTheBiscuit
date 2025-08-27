@@ -8,35 +8,21 @@ namespace Characters.Inventory
     // Bridge-class between core inventory logic and UI
     // * used to propagate calls of UI events (drag/drop)
     [Serializable]
-    public class InventoryComponent : ICharacterComponent
+    public class InventoryComponent : BaseChracterComponent
     {
         private InventoryGridRuntime _runtime;
 
         public event Action OnChanged; // expose to UI if you want to subscribe directly
-        
-        public void Init(CharacterBase characterBase)
-        {
-            var hub = characterBase.GetComponent<CharacterStatsHub>();
-            if (!hub) { Debug.LogError("InventoryComponent requires CharacterStatsHub."); return; }
 
-            _runtime = new InventoryGridRuntime(hub);
+        
+        public override void Init(CharacterBase characterBase)
+        {
+            base.Init(characterBase);
+
+            _runtime = new InventoryGridRuntime(characterBase.StatsHub);
             _runtime.OnChanged += () => OnChanged?.Invoke();
         }
 
-        public void OnDestroy()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateComponent(float deltaTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void FixedUpdateComponent(float fixedDeltaTime)
-        {
-            throw new NotImplementedException();
-        }
 
         // -------- UI entry points --------
         public bool UI_IsValidSlot(ItemDefinition item, int row, int col) => _runtime.IsValidSlot(item, row, col);
@@ -58,5 +44,6 @@ namespace Characters.Inventory
 
         /// <summary>UI helper to read one cell.</summary>
         public ItemDefinition UI_Get(int row, int col) => _runtime.Get(row, col);
+
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Characters
 {
     [Serializable]
-    public class MovementComponent : ICharacterComponent
+    public class MovementComponent : BaseChracterComponent
     {
         public enum MovingState
         {
@@ -16,8 +16,6 @@ namespace Characters
         }
 
         private Rigidbody2D _rigidBody;
-        private CharacterBase _character;
-        private CharacterStatsHub _statsHub;
 
         // cached stat values (rebuilt when any movement stat changes)
         private float _walkSpeed;
@@ -67,33 +65,28 @@ namespace Characters
             UpdateMovingState();
         }
 
-        public void Init(CharacterBase characterBase)
+        public override void Init(CharacterBase characterBase)
         {
-            _character = characterBase;
+            base.Init(characterBase);
             _rigidBody = characterBase.GetComponent<Rigidbody2D>();
             if (!_rigidBody) Debug.LogError("MovementComponent requires Rigidbody2D.", characterBase);
-
-            _statsHub = characterBase.GetComponent<CharacterStatsHub>();
-            if (!_statsHub) Debug.LogError("MovementComponent requires CharacterStatsHub.", characterBase);
-
-            RebuildCache();
-            _statsHub.Stats.OnStatChanged += OnStatChanged;
 
             _currentState = MovingState.Idle;
             MovementDirection = Vector2.zero;
             _isRunningRequested = false;
             _isMoving = false;
             _isDepleted = false;
-
-            Stamina = _staminaTotal; // start full
         }
 
-        public void OnDestroy()
+        public override void OnStart()
         {
-            if (_statsHub) _statsHub.Stats.OnStatChanged -= OnStatChanged;
+            RebuildCache();
+
+            // needs stats to be ready
+            Stamina = _staminaTotal;
         }
 
-        public void UpdateComponent(float deltaTime)
+        public override void UpdateComponent(float deltaTime)
         {
             UpdateMovingState();
 
@@ -119,10 +112,19 @@ namespace Characters
             }
         }
 
-        public void FixedUpdateComponent(float fixedDeltaTime)
+        public override void FixedUpdateComponent(float fixedDeltaTime)
         {
             if (!_rigidBody) return;
             _rigidBody.velocity = CurrentSpeed * MovementDirection;
+        }
+        protected override void AddListeners()
+        {
+            _character.StatsHub.Stats.OnStatChanged += OnStatChanged;
+        }
+
+        protected override void RemoveListeners()
+        {
+            _character.StatsHub.Stats.OnStatChanged -= OnStatChanged;
         }
 
         private void UpdateMovingState()
@@ -165,13 +167,13 @@ namespace Characters
 
         private void RebuildCache()
         {
-            _walkSpeed = _statsHub.Stats.Get(StatsDef.MoveSpeed);
-            _runSpeed = _statsHub.Stats.Get(StatsDef.RunSpeed);
-            _staminaTotal = Mathf.Max(0f, _statsHub.Stats.Get(StatsDef.StaminaTotal));
-            _staminaRegenIdle = _statsHub.Stats.Get(StatsDef.StaminaRegenRate);
-            _staminaRegenWalk = _statsHub.Stats.Get(StatsDef.StaminaWalkRegenRate);
-            _staminaDepleteRun = Mathf.Max(0f, _statsHub.Stats.Get(StatsDef.StaminaDepletionRate));
-            _staminaDepletionThreshold = Mathf.Clamp(_statsHub.Stats.Get(StatsDef.StaminaDepletionThreshold), 0f, _staminaTotal);
+            _walkSpeed = _character.StatsHub.Stats.Get(StatsDef.MoveSpeed);
+            _runSpeed = _character.StatsHub.Stats.Get(StatsDef.RunSpeed);
+            _staminaTotal = Mathf.Max(0f, _character.StatsHub.Stats.Get(StatsDef.StaminaTotal));
+            _staminaRegenIdle = _character.StatsHub.Stats.Get(StatsDef.StaminaRegenRate);
+            _staminaRegenWalk = _character.StatsHub.Stats.Get(StatsDef.StaminaWalkRegenRate);
+            _staminaDepleteRun = Mathf.Max(0f, _character.StatsHub.Stats.Get(StatsDef.StaminaDepletionRate));
+            _staminaDepletionThreshold = Mathf.Clamp(_character.StatsHub.Stats.Get(StatsDef.StaminaDepletionThreshold), 0f, _staminaTotal);
         }
 
         private static Vector2 CalculateAnimationDirection(Vector2 movementDirection)

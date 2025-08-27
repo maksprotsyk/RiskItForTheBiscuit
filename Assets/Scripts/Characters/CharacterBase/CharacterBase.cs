@@ -9,6 +9,7 @@ namespace Characters
         [SerializeField] private MovementComponent _movementComponent;
         [SerializeField] private AttackComponent _attackComponent;
         [SerializeField] private HealthComponent _healthComponent;
+        [SerializeField] private CharacterStatsHub _statsHubComponent;
         [SerializeField] private InventoryComponent _inventoryComponent;
 
         private CharacterAnimationController _animationController;
@@ -17,7 +18,9 @@ namespace Characters
         public MovementComponent Movement => _movementComponent;
         public AttackComponent Attack => _attackComponent;
         public HealthComponent Health => _healthComponent;
+        public CharacterStatsHub StatsHub => _statsHubComponent;
         public InventoryComponent Inventory => _inventoryComponent;
+
         public CharacterAnimationController AnimationController => _animationController;
 
         public void OnAttackAnimationStarted()
@@ -32,12 +35,6 @@ namespace Characters
 
         private void Awake()
         {
-            CharacterStatsHub statComp = GetComponent<CharacterStatsHub>();
-            if (statComp)
-            {
-                statComp.Init();
-            }
-
             Animator animator = GetComponent<Animator>();
             if (!animator)
             {
@@ -46,13 +43,21 @@ namespace Characters
             }
             _animationController = new CharacterAnimationController(animator);
 
-            _characterComponents = new List<ICharacterComponent> { _movementComponent, _attackComponent, _healthComponent, _inventoryComponent };
+            _characterComponents = new List<ICharacterComponent> {_statsHubComponent, _inventoryComponent, _movementComponent, _attackComponent, _healthComponent };
             foreach (ICharacterComponent comp in _characterComponents)
             {
                 comp.Init(this);
             }
         }
-        
+
+        private void Start()
+        {
+            foreach (ICharacterComponent comp in _characterComponents)
+            {
+                comp.OnStart();
+            }
+        }
+
         public void OnDestroy()
         {
             foreach (ICharacterComponent comp in _characterComponents)

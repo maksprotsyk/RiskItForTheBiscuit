@@ -4,6 +4,7 @@ using System;
 using Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Characters;
 
 // UI widget of an Inventory slot
 // * handles drop logic for 'UI-to-UI', 'World-to-UI' interactions
@@ -18,7 +19,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 
     private InventoryComponent InventoryComp;
 
-    void Awake()
+    private void Start()
     {
         GameplayManager gameplayManager = ManagersOwner.GetManager<GameplayManager>();
         if (!gameplayManager)
@@ -26,7 +27,13 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             Debug.LogError("InventorySlot: No GameplayManager found.");
             return;
         }
-        InventoryComp = gameplayManager.PlayerController.GetComponent<InventoryComponent>();
+        CharacterBase playerCharacter = gameplayManager.PlayerController.GetComponent<CharacterBase>();
+        if (!playerCharacter)
+        {
+            Debug.LogError("InventorySlot: No CharacterBase found on PlayerController.");
+            return;
+        }
+        InventoryComp = playerCharacter.Inventory;
     }
 
     public bool IsValidSlot(ItemDefinition itemToDrop)
