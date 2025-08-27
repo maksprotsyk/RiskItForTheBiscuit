@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Items;
-using UnityEngine;
 using System;
 
 namespace Characters.Inventory
@@ -8,7 +7,7 @@ namespace Characters.Inventory
     // Bridge-class between core inventory logic and UI
     // * used to propagate calls of UI events (drag/drop)
     [Serializable]
-    public class InventoryComponent : BaseChracterComponent
+    public class InventoryComponent : BaseCharacterComponent
     {
         private InventoryGridRuntime _runtime;
 

@@ -1,6 +1,5 @@
 using System;
 using AYellowpaper.SerializedCollections;
-using Characters.Stats;
 using DataStorage.Generated;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -103,7 +102,7 @@ namespace Characters
         {
             if (!isEnabled)
             {
-                if (_currentAttackType == AttackType.Sword && _currentProjectile != null)
+                if (_currentAttackType == AttackType.Sword && _currentProjectile)
                 {
                     Object.Destroy(_currentProjectile);
                     _currentProjectile = null;

@@ -14,7 +14,7 @@ namespace Characters.Inventory
     public sealed class InventoryGridRuntime
     {
         public const int Rows = 3;
-        public const int Cols = 2;
+        public const int Cols = 3;
 
         private readonly ItemDefinition[,] _grid = new ItemDefinition[Rows, Cols];
         private readonly StatCollection _stats;
@@ -32,8 +32,8 @@ namespace Characters.Inventory
 
         public bool IsValidSlot(ItemDefinition item, int row, int col)
         {
-            if (item == null || !InBounds(row, col)) return false;
-            if (!Accepts(row, item.Kind)) return false;
+            if (!item || !InBounds(row, col)) return false;
+            if (!Accepts(row, item)) return false;
             if (_grid[row, col] != null) return false;
 
             return true;
@@ -63,7 +63,7 @@ namespace Characters.Inventory
             if (!InBounds(srcRow, srcCol) || !InBounds(dstRow, dstCol)) return false;
             var item = _grid[srcRow, srcCol];
             if (item == null) return false;
-            if (!Accepts(dstRow, item.Kind)) return false;
+            if (!Accepts(dstRow, item)) return false;
             if (_grid[dstRow, dstCol] != null) return false;
 
             _grid[srcRow, srcCol] = null;
@@ -95,13 +95,14 @@ namespace Characters.Inventory
             var item = _grid[row, col];
             if (item == null) return false;
 
-            if (item.Kind == ItemKind.Passive)
+            var passiveItem = item as PassiveItemDefinition;
+            if (passiveItem)
             {
-                float extraFactor = Mathf.Max(0f, item.ConsumeTotalMultiplier - 1f);
+                float extraFactor = Mathf.Max(0f, passiveItem.ConsumeTotalMultiplier - 1f);
                 if (extraFactor <= 0f) return false;
 
                 var extra = BuildScaledModifiers(item, extraFactor, source: item); // same source is okay (EffectSystem uses distinct TimedEffect instances)
-                _effects.Add(new TimedEffect(item, extra, item.ConsumeDurationSeconds));
+                _effects.Add(new TimedEffect(item, extra, passiveItem.ConsumeDurationSeconds));
                 return true;
             }
 
@@ -113,9 +114,9 @@ namespace Characters.Inventory
         public IReadOnlyList<(int row, int col, ItemDefinition item)> Snapshot()
         {
             var list = new List<(int, int, ItemDefinition)>(Rows * Cols);
-            for (int r = 0; r < Rows; r++)
-                for (int c = 0; c < Cols; c++)
-                    if (_grid[r, c] != null) list.Add((r, c, _grid[r, c]));
+            for (var r = 0; r < Rows; r++)
+                for (var c = 0; c < Cols; c++)
+                    if (_grid[r, c]) list.Add((r, c, _grid[r, c]));
             return list;
         }
 
@@ -124,10 +125,10 @@ namespace Characters.Inventory
         private static bool InBounds(int row, int col) => row >= 0 && row < Rows && col >= 0 && col < Cols;
 
         /// <summary>Top row (row 0) allows Weapons; rows 1-2 allow Passives.</summary>
-        private static bool Accepts(int row, ItemKind kind)
+        private static bool Accepts(int row, ItemDefinition item)
         {
-            if (row == 0) return kind == ItemKind.Weapon;
-            return kind == ItemKind.Passive; // rows 1 and 2
+            if (row == 0) return item.GetType() == typeof(WeaponDefinition); // row 0
+            return item.GetType() == typeof(PassiveItemDefinition); // rows 1 and 2
         }
 
         private void ApplyPersistent(ItemDefinition item, bool apply)

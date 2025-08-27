@@ -1,43 +1,43 @@
-using Items;
+﻿using Items;
 using Managers;
-using System.Collections;
-using System.Collections.Generic;
-using UI;
 using UnityEngine;
 
 // A component for all objects that want to display a tooltip
 // * sends events to TooltipManager when mouse hover/leave
 // * takes ItemDefinition from a hovered item to show propper info
-public class ItemTooltip : MonoBehaviour
+namespace UI
 {
-    private TooltipManager tooltipManager;
-
-    private TooltipManager GetTooltipManagerInstance()
+    public class ItemTooltip : MonoBehaviour
     {
-        if (tooltipManager == null)
+        private TooltipManager tooltipManager;
+
+        private TooltipManager GetTooltipManagerInstance()
         {
-            tooltipManager = ManagersOwner.GetManager<TooltipManager>();
             if (tooltipManager == null)
             {
-                Debug.LogError($"Managers owner doesn't contain {nameof(TooltipManager)}");
+                tooltipManager = ManagersOwner.GetManager<TooltipManager>();
+                if (tooltipManager == null)
+                {
+                    Debug.LogError($"Managers owner doesn't contain {nameof(TooltipManager)}");
+                }
+            }
+            return tooltipManager;
+        }
+
+        public void OnMouseEnterHandle()
+        {
+            // TODO: need to add ItemDefinition for UI items in Inventory
+            PickupItem pickupComponent = GetComponent<PickupItem>();
+            if(pickupComponent)
+            {
+                ItemDefinition itemDesc = pickupComponent.ItemDescription;
+                GetTooltipManagerInstance().SetAndShowTooltip(itemDesc);
             }
         }
-        return tooltipManager;
-    }
 
-    public void OnMouseEnterHandle()
-    {
-        // TODO: need to add ItemDefinition for UI items in Inventory
-        PickupItem pickupComponent = GetComponent<PickupItem>();
-        if(pickupComponent)
+        public void OnMouseExitHandle()
         {
-            ItemDefinition itemDesc = pickupComponent.ItemDescription;
-            GetTooltipManagerInstance().SetAndShowTooltip(itemDesc);
+            GetTooltipManagerInstance().HideTooltip();
         }
-    }
-
-    public void OnMouseExitHandle()
-    {
-        GetTooltipManagerInstance().HideTooltip();
     }
 }
