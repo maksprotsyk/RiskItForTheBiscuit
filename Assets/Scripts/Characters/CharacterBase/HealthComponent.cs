@@ -8,6 +8,8 @@ namespace Characters
     [Serializable]
     public class HealthComponent : BaseChracterComponent
     {
+        public event Action OnDeath;
+
         private CharacterAnimationController _animationController;
 
         private float _currentHealth;
@@ -20,6 +22,7 @@ namespace Characters
             base.Init(characterBase);
 
             _animationController = characterBase.AnimationController;
+            IsDead = false;
         }
 
         public override void OnStart()
@@ -46,7 +49,7 @@ namespace Characters
 
         public void TakeDamage(float hp)
         {
-            if (IsInvulnerable) return;
+            if (IsInvulnerable || IsDead) return;
             IsInvulnerable = true;
 
             float armorBefore = _currentArmor;
@@ -59,6 +62,8 @@ namespace Characters
                 if (_currentHealth <= 0)
                 {
                     _animationController.SetTrigger(AnimationParameters.Death);
+                    IsDead = true;
+                    OnDeath?.Invoke();
                 }
                 else
                 {
@@ -74,6 +79,7 @@ namespace Characters
 
         public void Heal(float hp) => _currentHealth = Mathf.Min(MaxHealth, _currentHealth + hp);
         public void AddArmor(float a) => _currentArmor = Mathf.Min(MaxArmor, _currentArmor + a);
+        public bool IsDead { get; private set; }
 
         private bool IsInvulnerable
         {

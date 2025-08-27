@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Characters.Inventory;
 using UnityEngine;
@@ -31,6 +32,11 @@ namespace Characters
         public void OnAttackAnimationFinished()
         {
             _attackComponent.SetProjectileState(false);
+        }
+
+        public void OnDeathAnimationFinished()
+        {
+            Destroy(gameObject);
         }
 
         private void Awake()

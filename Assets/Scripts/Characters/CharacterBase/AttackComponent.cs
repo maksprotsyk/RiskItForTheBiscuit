@@ -64,7 +64,7 @@ namespace Characters
 
         public bool AttackIsReady()
         {
-            if (_cooldownTimer > 0f) return false;
+            if (_character.Health.IsDead || _cooldownTimer > 0f) return false;
 
             // block double-spawn for melee that keeps a child collider active until anim turns it off
             if (_currentProjectile && _currentAttackType == AttackType.Sword) return false;

@@ -46,7 +46,7 @@ namespace Characters
         {
             _isMoving = direction.sqrMagnitude > 0.0001f;
 
-            if (_isMoving)
+            if (_isMoving && !_character.Health.IsDead)
             {
                 MovementDirection = direction.normalized;
 
@@ -131,6 +131,12 @@ namespace Characters
 
         private void UpdateMovingState()
         {
+            if (_character.Health.IsDead)
+            {
+                _currentState = MovingState.Idle;
+                return;
+            }
+
             if (_isRunningRequested && !_isDepleted && _isMoving)
                 _currentState = MovingState.Running;
             else if (_isMoving)
