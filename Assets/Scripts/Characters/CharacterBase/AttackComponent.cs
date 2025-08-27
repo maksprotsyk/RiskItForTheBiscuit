@@ -14,7 +14,7 @@ namespace Characters
     }
 
     [Serializable]
-    public class AttackComponent : BaseChracterComponent
+    public class AttackComponent : BaseCharacterComponent
     {
         [SerializeField] 
         private SerializedDictionary<AttackType, GameObject> _attackProjectiles;

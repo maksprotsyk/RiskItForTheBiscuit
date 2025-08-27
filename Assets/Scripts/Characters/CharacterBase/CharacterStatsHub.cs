@@ -1,17 +1,16 @@
-﻿using System.Diagnostics;
-using Characters.Effects;
-using Characters.Inventory;
+﻿using Characters.Effects;
 using Characters.Stats;
 using UnityEngine;
 using DataStorage;
 using DataStorage.Generated;
 using AYellowpaper.SerializedCollections;
 using System;
+using Characters.Inventory;
 
 namespace Characters
 {
     [Serializable]
-    public class CharacterStatsHub : BaseChracterComponent
+    public class CharacterStatsHub : BaseCharacterComponent
     {
         [SerializeField] private IDataContainer<StatsTableRow> _statsDefinitionsTable;
 

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Characters
 {
     [Serializable]
-    public class HealthComponent : BaseChracterComponent
+    public class HealthComponent : BaseCharacterComponent
     {
         public event Action OnDeath;
 
