@@ -1,21 +1,18 @@
 using UnityEngine;
 using Characters.Player;
-using System.Reflection;
-using Characters.Inventory;
 
 namespace Managers
 {
-
     public class GameplayManager : MonoBehaviour
     {
-        private LayerMask targetLayer;
+        private LayerMask _targetLayer;
         private PlayerController _playerController;
 		
         public PlayerController PlayerController
 		{
             get
             {
-                if (_playerController == null)
+                if (!_playerController)
                 {
                     _playerController = FindObjectOfType<PlayerController>();
                 }
@@ -25,7 +22,7 @@ namespace Managers
 
         void Awake()
         {
-            targetLayer = LayerMask.GetMask("Drag");
+            _targetLayer = LayerMask.GetMask("Drag");
         }
 
         void Update()
@@ -44,31 +41,31 @@ namespace Managers
         }
 
         // Triggering custom mouse events for objects on "Drag" layer
-        void OnMouseLeftButtonEvent(bool IsDown)
+        void OnMouseLeftButtonEvent(bool isDown)
         {
             Vector3 mouseWorldPos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos3D.z = 0f; // Force onto the same plane as 2D colliders
             Vector2 mouseWorldPos = mouseWorldPos3D;
 
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, targetLayer);
+            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, _targetLayer);
             if (!hit)
             {
                 return;
             }
 
-            DraggableObjectItem DragComponent = hit.GetComponent<DraggableObjectItem>();
-            if (!DragComponent)
+            DraggableObjectItem dragComponent = hit.GetComponent<DraggableObjectItem>();
+            if (!dragComponent)
             {
                 return;
             }
 
-            if (IsDown)
+            if (isDown)
             {
-                DragComponent.OnMouseDownHandle();
+                dragComponent.OnMouseDownHandle();
             }
             else
             {
-                DragComponent.OnMouseUpHandle();
+                dragComponent.OnMouseUpHandle();
             }
         }
     }

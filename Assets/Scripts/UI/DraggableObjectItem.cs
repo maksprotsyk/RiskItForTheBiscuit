@@ -108,7 +108,7 @@ public class DraggableObjectItem : MonoBehaviour
         foreach (var result in raycastResults)
         {
             var dropSlot = result.gameObject.GetComponent<InventorySlot>();
-            if (dropSlot != null && dropSlot.IsValidSlot(pickupComp.ItemDescription))
+            if (dropSlot && dropSlot.IsValidSlot(pickupComp.ItemDescription))
             {
                 // Manually call OnDrop
                 dropSlot.OnDrop(pointerData);

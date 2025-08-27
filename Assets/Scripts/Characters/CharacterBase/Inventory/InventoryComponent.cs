@@ -7,20 +7,35 @@ namespace Characters.Inventory
 {
     // Bridge-class between core inventory logic and UI
     // * used to propagate calls of UI events (drag/drop)
-    public class InventoryComponent : MonoBehaviour
+    [Serializable]
+    public class InventoryComponent : ICharacterComponent
     {
         private InventoryGridRuntime _runtime;
 
         public event Action OnChanged; // expose to UI if you want to subscribe directly
-
-        private void Awake()
+        
+        public void Init(CharacterBase characterBase)
         {
-            // TODO: Initialize CharacterStatsHub component properly after Inventory is added to every character
-            var hub = GetComponent<CharacterStatsHub>();
+            var hub = characterBase.GetComponent<CharacterStatsHub>();
             if (!hub) { Debug.LogError("InventoryComponent requires CharacterStatsHub."); return; }
 
             _runtime = new InventoryGridRuntime(hub);
             _runtime.OnChanged += () => OnChanged?.Invoke();
+        }
+
+        public void OnDestroy()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateComponent(float deltaTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FixedUpdateComponent(float fixedDeltaTime)
+        {
+            throw new NotImplementedException();
         }
 
         // -------- UI entry points --------

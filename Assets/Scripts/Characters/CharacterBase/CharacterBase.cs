@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Characters.Inventory;
 using UnityEngine;
 
 namespace Characters
@@ -8,6 +9,7 @@ namespace Characters
         [SerializeField] private MovementComponent _movementComponent;
         [SerializeField] private AttackComponent _attackComponent;
         [SerializeField] private HealthComponent _healthComponent;
+        [SerializeField] private InventoryComponent _inventoryComponent;
 
         private CharacterAnimationController _animationController;
         private List<ICharacterComponent> _characterComponents;
@@ -15,6 +17,7 @@ namespace Characters
         public MovementComponent Movement => _movementComponent;
         public AttackComponent Attack => _attackComponent;
         public HealthComponent Health => _healthComponent;
+        public InventoryComponent Inventory => _inventoryComponent;
         public CharacterAnimationController AnimationController => _animationController;
 
         public void OnAttackAnimationStarted()
@@ -29,10 +32,10 @@ namespace Characters
 
         private void Awake()
         {
-            CharacterStatsHub StatComp = GetComponent<CharacterStatsHub>();
-            if (StatComp)
+            CharacterStatsHub statComp = GetComponent<CharacterStatsHub>();
+            if (statComp)
             {
-                StatComp.Init();
+                statComp.Init();
             }
 
             Animator animator = GetComponent<Animator>();
@@ -43,7 +46,7 @@ namespace Characters
             }
             _animationController = new CharacterAnimationController(animator);
 
-            _characterComponents = new List<ICharacterComponent> { _movementComponent, _attackComponent, _healthComponent };
+            _characterComponents = new List<ICharacterComponent> { _movementComponent, _attackComponent, _healthComponent, _inventoryComponent };
             foreach (ICharacterComponent comp in _characterComponents)
             {
                 comp.Init(this);

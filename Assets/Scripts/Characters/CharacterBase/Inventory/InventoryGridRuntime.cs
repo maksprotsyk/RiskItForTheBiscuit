@@ -14,7 +14,7 @@ namespace Characters.Inventory
     public sealed class InventoryGridRuntime
     {
         public const int Rows = 3;
-        public const int Cols = 3;
+        public const int Cols = 2;
 
         private readonly ItemDefinition[,] _grid = new ItemDefinition[Rows, Cols];
         private readonly StatCollection _stats;

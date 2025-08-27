@@ -1,8 +1,7 @@
 using Characters.Inventory;
 using Items;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,7 +20,13 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 
     void Awake()
     {
-        InventoryComp = FindObjectOfType<InventoryComponent>();
+        GameplayManager gameplayManager = ManagersOwner.GetManager<GameplayManager>();
+        if (!gameplayManager)
+        {
+            Debug.LogError("InventorySlot: No GameplayManager found.");
+            return;
+        }
+        InventoryComp = gameplayManager.PlayerController.GetComponent<InventoryComponent>();
     }
 
     public bool IsValidSlot(ItemDefinition itemToDrop)
