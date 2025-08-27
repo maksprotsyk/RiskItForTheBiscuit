@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Characters
 {
     [Serializable]
-    public class MovementComponent : BaseChracterComponent
+    public class MovementComponent : BaseCharacterComponent
     {
         public enum MovingState
         {
