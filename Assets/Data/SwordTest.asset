@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: Sword
+  m_Name: SwordTest
   m_EditorClassIdentifier: Assembly-CSharp:Items:WeaponDefinition
-  Name: Sword
-  Description: Hi Maks
-  Icon: {fileID: 1325329283, guid: a20f61be29e807a4ead293c2963a2281, type: 3}
+  Name: 
+  Description: 
+  Icon: {fileID: 0}
   Rarity: 0
   Modifiers: []
   ProjectilePrefab: {fileID: 0}
-  Damage: 10
+  Damage: 0
   Cooldown: 0
   Range: 0
   Speed: 0

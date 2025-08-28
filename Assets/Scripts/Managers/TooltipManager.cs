@@ -74,9 +74,23 @@ namespace Managers
             if (tooltip)
             {
                 tooltip.transform.position = Input.mousePosition;
+
+                if (!IsTooltipOnTop(tooltip))
+                {
+                    tooltip.transform.SetAsLastSibling();
+                }
             }
 
             HandleMouseHover();
+        }
+
+        bool IsTooltipOnTop(GameObject tooltip)
+        {
+            Transform parent = tooltip.transform.parent;
+            if (parent == null) return false;
+
+            // last sibling index is always childCount - 1
+            return tooltip.transform.GetSiblingIndex() == parent.childCount - 1;
         }
 
         void HandleMouseHover()
@@ -87,7 +101,8 @@ namespace Managers
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPos.z = 0f;
             RaycastHit2D hit2D = Physics2D.Raycast(mouseWorldPos, Vector2.zero, Mathf.Infinity, sceneTargetLayer);
-            if (hit2D.collider != null)
+
+            if (hit2D.collider != null && hit2D.collider.gameObject.GetComponent<SpriteRenderer>().isVisible)
             {
                 hoveredObject = hit2D.collider.gameObject;
             }

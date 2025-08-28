@@ -14,6 +14,8 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 {
     public Image inventoryItemImage;
     [HideInInspector] public Transform parentAfterDrag;
+    public static readonly Vector2 DefaultPivot = new Vector2(0.0f, 1.0f);
+    public static readonly Vector2 DragPivot = new Vector2(0.5f, 0.5f);
 
     public static event Action<PointerEventData> OnDroppedOutsideCanvas;
 
@@ -54,12 +56,14 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             inventoryItemImage = dragImage;
         }
+        GetComponent<RectTransform>().pivot = DragPivot;
         inventoryItemImage.raycastTarget = false;
     }
 
     public void OnUIDrop()
     {
         transform.SetParent(parentAfterDrag);
+        GetComponent<RectTransform>().pivot = DefaultPivot;
         inventoryItemImage.raycastTarget = true;
     }
 

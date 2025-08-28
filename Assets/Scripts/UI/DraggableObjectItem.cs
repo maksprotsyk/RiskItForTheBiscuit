@@ -13,6 +13,8 @@ using Unity.VisualScripting;
 // * sends calls to UI widgets that can handle drop events
 public class DraggableObjectItem : MonoBehaviour
 {
+    public GameObject UIItemPrefab;
+
     private GameObject dragIcon;
     private RectTransform dragIconRect;
     private bool isDragging = false;
@@ -78,8 +80,16 @@ public class DraggableObjectItem : MonoBehaviour
     // drag over inventory UI
     private GameObject CreateUIItem()
     {
-        GameObject UIItem = new GameObject("DragIcon", typeof(RectTransform), typeof(Image), typeof(DraggableUIItem), typeof(PickupItem));
-        UIItem.transform.SetParent(GameObject.Find("Canvas").transform, false);        
+        GameObject UIItem = null;
+
+        if (!UIItemPrefab)
+        {
+            Debug.Log("No UI item prefab to spawn objects from.");
+            return UIItem;
+        }
+
+        UIItem = Instantiate(UIItemPrefab, Vector3.zero, Quaternion.identity);
+        UIItem.transform.SetParent(GameObject.Find("Canvas").transform, false);
 
         var spriteRenderer = GetComponent<SpriteRenderer>();
         UIItem.GetComponent<Image>().sprite = spriteRenderer.sprite;
