@@ -17,7 +17,9 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public static readonly Vector2 DefaultPivot = new Vector2(0.0f, 1.0f);
     public static readonly Vector2 DragPivot = new Vector2(0.5f, 0.5f);
 
-    public static event Action<PointerEventData> OnDroppedOutsideCanvas;
+    public event Action<PointerEventData> OnBeginDragEvent;
+    public event Action<PointerEventData> OnEndDragEvent;
+    public event Action<PointerEventData> OnDroppedOutsideCanvas;
 
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
@@ -25,13 +27,16 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
+
         OnUIPick(inventoryItemImage);
+        OnBeginDragEvent?.Invoke(eventData);
     }
 
     public void OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
         // Debug.Log("Dragging UI");
         transform.position = Input.mousePosition;
+        
     }
 
     public void OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
@@ -39,6 +44,10 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         Debug.Log("End UI drag");
 
         OnUIDrop();
+        OnEndDragEvent?.Invoke(eventData);
+
+        // Code to check if we dropped outside the UI (on a scene).
+        // Currently unused.
         //bool isUIHit = SendRaycastUICheck(eventData);
         //if (isUIHit)
         //{

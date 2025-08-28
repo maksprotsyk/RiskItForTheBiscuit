@@ -123,7 +123,7 @@ public class DraggableObjectItem : MonoBehaviour
             {
                 // Manually call OnDrop
                 dropSlot.OnDrop(pointerData);
-                Debug.Log("OnDrop triggered on " + result.gameObject.name);
+                //Debug.Log("OnDrop triggered on " + result.gameObject.name);
                 isUIHit = true;
                 break;
             }

@@ -1151,14 +1151,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2383544831081026895, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
-      propertyPath: UIItemPrefab
-      value: 
-      objectReference: {fileID: 9090874318058236876, guid: 80d527a9f22867b42869d00083bd2ca3, type: 3}
-    - target: {fileID: 4669384837570352941, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
-      propertyPath: ItemDescription
-      value: 
-      objectReference: {fileID: 11400000, guid: 3df48840efc8d7948a9d0a7f3cf7b4f4, type: 2}
     - target: {fileID: 6495429892694957252, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
       propertyPath: m_Name
       value: SceneItem (1)
@@ -1203,14 +1195,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8766652075697459884, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6495429892694957252, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2034440830}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
 --- !u!1 &879346484
 GameObject:
@@ -2069,15 +2057,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 961467484610485061, guid: 80d527a9f22867b42869d00083bd2ca3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 961467484610485061, guid: 80d527a9f22867b42869d00083bd2ca3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 961467484610485061, guid: 80d527a9f22867b42869d00083bd2ca3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 961467484610485061, guid: 80d527a9f22867b42869d00083bd2ca3, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -3242,23 +3230,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 763bec5327bdb9743b3229e20015501a, type: 3}
---- !u!1 &2034440824 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6495429892694957252, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
-  m_PrefabInstance: {fileID: 848595058}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2034440830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2034440824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3bbd149eb04e99a1a53c08575fef25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2131306021
 GameObject:
   m_ObjectHideFlags: 0

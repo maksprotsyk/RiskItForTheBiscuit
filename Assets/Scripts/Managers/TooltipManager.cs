@@ -147,7 +147,7 @@ namespace Managers
                 return;
             }
 
-            Debug.Log("Mouse entered: " + objectEntered.name);
+            //Debug.Log("Mouse entered: " + objectEntered.name);
             ItemTooltip tooltipComp = objectEntered.GetComponent<ItemTooltip>();
             if (tooltipComp)
             {
@@ -162,7 +162,7 @@ namespace Managers
                 return;
             }
 
-            Debug.Log("Mouse exited: " + objectExited.name);
+            //Debug.Log("Mouse exited: " + objectExited.name);
             ItemTooltip tooltipComp = objectExited.GetComponent<ItemTooltip>();
             if (tooltipComp)
             {
