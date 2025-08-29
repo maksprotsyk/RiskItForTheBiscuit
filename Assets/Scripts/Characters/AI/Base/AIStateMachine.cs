@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 namespace Characters.AI
 {
-    [System.Serializable]
+    [Serializable]
     public class AIStateMachine: IAIStateMachine
     {
         [SerializeField] protected SerializedDictionary<AIState, AIStateWrapper> _statesLogic;
@@ -23,6 +23,7 @@ namespace Characters.AI
                     return;
                 }
 
+                Debug.Log($"Transitioning from {_state} to {value}");
                 _statesLogic[_state].StateLogic.OnExit();
                 _state = value;
                 _statesLogic[_state].StateLogic.OnEnter();
@@ -32,11 +33,9 @@ namespace Characters.AI
         }
         public void Init(CharacterBase i_character, NavMeshAgent i_agent)
         {
-            foreach (var p in _statesLogic)
+            foreach (AIStateWrapper stateLogic in _statesLogic.Values)
             {
-                AIStateWrapper stateLogic = p.Value;
-                AIState state = p.Key;
-                stateLogic.StateLogic.Init(state, i_character, i_agent);
+                stateLogic.StateLogic.Init(i_character, i_agent);
             }
             _state = _initialState;
             _statesLogic[_initialState].StateLogic.OnEnter();
@@ -44,8 +43,11 @@ namespace Characters.AI
 
         public void Update(float dt)
         {
-            AIState newState = _statesLogic[_state].StateLogic.OnUpdate(dt);
-            State = newState;
+            _statesLogic[_state].StateLogic.OnUpdate(dt);
+            if (_statesLogic[_state].StateLogic.TryGetNextState(out AIState newState))
+            {
+                State = newState;
+            }
         }
 
     }

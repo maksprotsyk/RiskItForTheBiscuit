@@ -32,6 +32,8 @@ namespace Characters
         private bool _isDepleted;
 
         public float Stamina { get; private set; }
+        
+        public float StaminaPercentage => Stamina / _staminaTotal; 
 
         public float CurrentSpeed => _currentState switch
         {

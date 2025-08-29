@@ -86,6 +86,8 @@ namespace Characters
             set => _invulnerabilityTimer = value ? InvulnDuration : 0f;
         }
 
+        public float HealthPercentage { get => _currentHealth / MaxHealth; }
+
         private void OnStatChanged(StatsDef stat)
         {
             if (stat == StatsDef.MaxHealth)

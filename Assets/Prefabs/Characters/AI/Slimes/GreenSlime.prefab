@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 1865335420907636781}
   - component: {fileID: 4015687176000255276}
   - component: {fileID: 1219313007189014236}
-  - component: {fileID: 3270046207440903201}
   - component: {fileID: 4424913856681998245}
+  - component: {fileID: 3736953513484241018}
   m_Layer: 0
   m_Name: GreenSlime
   m_TagString: Untagged
@@ -123,11 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7cdcff3938ec0046b0d9c85c520c052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackComponent:
-    _attackProjectiles:
-      _serializedList:
-      - Key: 0
-        Value: {fileID: 7032444853151934704, guid: 00c17e477edd80346a038371adc26ac8, type: 3}
+  _weaponController:
+    _attackTrigger: 0
   _statsHubComponent:
     _statsDefinitionsTable: {fileID: 11400000, guid: db159834160e1bc45a891d795ceff623, type: 2}
     _baseStatsOverrides:
@@ -223,44 +220,6 @@ NavMeshAgent:
   m_BaseOffset: 0.2
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3270046207440903201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3489518492760200362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f829b455792f3684d946308c275c76b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stateMachine:
-    rid: 4687103181009977346
-  references:
-    version: 2
-    RefIds:
-    - rid: 4687103181009977346
-      type: {class: AIStateMachine, ns: Characters.AI, asm: Assembly-CSharp}
-      data:
-        _statesLogic:
-          _serializedList:
-          - Key: 1
-            Value:
-              StateLogic:
-                rid: 4687103181009977347
-          - Key: 2
-            Value:
-              StateLogic:
-                rid: 4687103228495527936
-        _initialState: 1
-    - rid: 4687103181009977347
-      type: {class: AIChasingState, ns: Characters.AI, asm: Assembly-CSharp}
-      data:
-        _runWhileChasing: 1
-    - rid: 4687103228495527936
-      type: {class: AIAttackingState, ns: Characters.AI, asm: Assembly-CSharp}
-      data: 
 --- !u!70 &4424913856681998245
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -296,3 +255,88 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.2}
   m_Size: {x: 1.1, y: 0.7}
   m_Direction: 1
+--- !u!114 &3736953513484241018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3489518492760200362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f829b455792f3684d946308c275c76b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateMachine:
+    rid: 4687103292808364032
+  references:
+    version: 2
+    RefIds:
+    - rid: 4687103292808364032
+      type: {class: AIStateMachine, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _statesLogic:
+          _serializedList:
+          - Key: 2
+            Value:
+              StateLogic:
+                rid: 4687103292808364034
+          - Key: 3
+            Value:
+              StateLogic:
+                rid: 4687103292808364044
+          - Key: 1
+            Value:
+              StateLogic:
+                rid: 4687103292808364041
+        _initialState: 1
+    - rid: 4687103292808364034
+      type: {class: AIAttackingState, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _stateChangeConditions:
+          _serializedList:
+          - Key: 1
+            Value:
+              Condition:
+                rid: 4687103292808364039
+    - rid: 4687103292808364039
+      type: {class: AICanAttackPlayerCondition, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _shouldReturnTrue: 0
+    - rid: 4687103292808364041
+      type: {class: AIChasingState, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _stateChangeConditions:
+          _serializedList:
+          - Key: 2
+            Value:
+              Condition:
+                rid: 4687103292808364042
+          - Key: 3
+            Value:
+              Condition:
+                rid: 4687103292808364043
+        _runWhileChasing: 1
+    - rid: 4687103292808364042
+      type: {class: AICanAttackPlayerCondition, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _shouldReturnTrue: 1
+    - rid: 4687103292808364043
+      type: {class: AILowStaminaCondition, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _shouldReturnTrue: 1
+        _staminaThreshold: 0.1
+    - rid: 4687103292808364044
+      type: {class: AIRestingState, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _stateChangeConditions:
+          _serializedList:
+          - Key: 1
+            Value:
+              Condition:
+                rid: 4687103292808364045
+    - rid: 4687103292808364045
+      type: {class: AILowStaminaCondition, ns: Characters.AI, asm: Assembly-CSharp}
+      data:
+        _shouldReturnTrue: 0
+        _staminaThreshold: 0.7

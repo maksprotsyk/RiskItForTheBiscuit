@@ -4,6 +4,9 @@ namespace Characters.AI
     {
         Idle,
         Chasing,
-        Attacking
+        Attacking,
+        Resting,
+        Escaping,
+        Count
     }
 }

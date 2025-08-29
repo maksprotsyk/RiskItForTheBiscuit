@@ -13,19 +13,17 @@ namespace Characters.AI
 
         private GameplayManager _gameplayManager;
         private Transform _playerTransform;
-        private CharacterBase _playerCharacter;
         private Vector3 _playerPosition;
 
         // to avoid recalculating path on every frame
         private float _pathRecalculationTimer = 0.0f;
 
-        public override void Init(AIState i_initialState, CharacterBase i_character, NavMeshAgent i_agent)
+        public override void Init(CharacterBase i_character, NavMeshAgent i_agent)
         {
-            base.Init(i_initialState, i_character, i_agent);
+            base.Init(i_character, i_agent);
 
             _gameplayManager = ManagersOwner.GetManager<GameplayManager>();
             _playerTransform = _gameplayManager.PlayerController.transform;
-            _playerCharacter = _gameplayManager.PlayerController.GetComponent<CharacterBase>();
             _playerPosition = _playerTransform.position;
 
             // avoiding all recalculations at the same time 
@@ -35,17 +33,15 @@ namespace Characters.AI
 
         public override void OnEnter()
         {
+            base.OnEnter();
             _character.Movement.SetPrefferedMovingState(_runWhileChasing ? MovementComponent.MovingState.Running: MovementComponent.MovingState.Walking);
         }
 
-        public override AIState OnUpdate(float deltaTime)
+        public override void OnUpdate(float deltaTime)
         {
+            base.OnUpdate(deltaTime);
+
             _pathRecalculationTimer -= deltaTime;
-            
-            if (_character.Weapon.IsInRange(_playerCharacter))
-            {
-                return AIState.Attacking;
-            }
 
             if (HasArrivedAtDestination() || ShouldChangePath())
             {
@@ -54,12 +50,11 @@ namespace Characters.AI
             }
 
             UpdateMovementState();
-
-            return base.OnUpdate(deltaTime);
         }
 
         public override void OnExit()
         {
+            base.OnExit();
             _agent.ResetPath();
             _character.Movement.SetPrefferedMovingState(MovementComponent.MovingState.Idle);
         }
