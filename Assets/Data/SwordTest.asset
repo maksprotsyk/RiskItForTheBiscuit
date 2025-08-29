@@ -17,8 +17,11 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Rarity: 0
   Modifiers: []
-  ProjectilePrefab: {fileID: 0}
+  Logic: {fileID: 11400000, guid: 509a1dbd4a080d24db7cdfc5bc85e5ff, type: 2}
   Damage: 0
   Cooldown: 0
   Range: 0
   Speed: 0
+  ProjectilePrefab: {fileID: 7032444853151934704, guid: 00c17e477edd80346a038371adc26ac8, type: 3}
+  FireEventName: HitOn
+  StopEventName: HitOff

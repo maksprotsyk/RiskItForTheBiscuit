@@ -16,15 +16,39 @@ MonoBehaviour:
   GuaranteedEnemies:
     _serializedList:
     - Key:
-        _id: GreenSlime
-      Value: 5
+        _id: Slime1
+      Value: 1
+    - Key:
+        _id: Slime2
+      Value: 1
+    - Key:
+        _id: Slime3
+      Value: 1
+    - Key:
+        _id: Beholder1
+      Value: 1
+    - Key:
+        _id: Beholder2
+      Value: 1
+    - Key:
+        _id: Beholder3
+      Value: 1
+    - Key:
+        _id: Vampire1
+      Value: 1
+    - Key:
+        _id: Vampire2
+      Value: 1
+    - Key:
+        _id: Vampire3
+      Value: 1
   EnemySpawnProbabilities:
     _serializedList:
     - Key:
-        _id: GreenSlime
+        _id: Slime1
       Value: 1
-  MinRandomEnemyCount: 15
-  MaxRandomEnemyCount: 20
-  RandomEnemiesSpawnInterval: 1
-  GuarantedEnemiesSpawnInterval: 0.5
+  MinRandomEnemyCount: 1
+  MaxRandomEnemyCount: 5
+  RandomEnemiesSpawnInterval: 4
+  GuarantedEnemiesSpawnInterval: 2
   WaveDuration: 30

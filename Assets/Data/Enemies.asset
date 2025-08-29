@@ -15,6 +15,38 @@ MonoBehaviour:
   _data:
     _serializedList:
     - Key:
-        _id: GreenSlime
+        _id: Slime1
       Value:
         Prefab: {fileID: 3489518492760200362, guid: 22b30fa17447cff4cac124e9b47abda1, type: 3}
+    - Key:
+        _id: Slime2
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: e6a66231a5c16b1498b7bc9a206b6a71, type: 3}
+    - Key:
+        _id: Slime3
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: 57a6b11fef9c7ec4e97013a74e874b75, type: 3}
+    - Key:
+        _id: Beholder1
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: 3105094ba2a884d4e8cba008c5bab5b7, type: 3}
+    - Key:
+        _id: Beholder2
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: 2ece0fbdabba92b48afb26d169e9e963, type: 3}
+    - Key:
+        _id: Beholder3
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: 2a3c051633f8cec4c93da172d0a088ab, type: 3}
+    - Key:
+        _id: Vampire1
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: e148458da39d9dc468583091328919e8, type: 3}
+    - Key:
+        _id: Vampire2
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: 8a9d3262887a4374395f25765a3c9581, type: 3}
+    - Key:
+        _id: Vampire3
+      Value:
+        Prefab: {fileID: 3489518492760200362, guid: 3147143aa4a1196429a5686da0a47464, type: 3}
