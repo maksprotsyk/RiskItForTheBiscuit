@@ -30,7 +30,7 @@ namespace Characters.Weapons
         {
             base.OnStart();
             // Subscribe to inventory changes and equip first weapon on top row
-            _character.StatsHub.Inventory.OnChanged += SyncEquippedFromInventory;
+            _character.Inventory.OnChanged += SyncEquippedFromInventory;
             SyncEquippedFromInventory(); // initial
             RebuildCache();
         }
@@ -38,7 +38,7 @@ namespace Characters.Weapons
         public override void OnDestroy()
         {
             base.OnDestroy();
-            _character.StatsHub.Inventory.OnChanged -= SyncEquippedFromInventory;
+            _character.Inventory.OnChanged -= SyncEquippedFromInventory;
             Unequip();
         }
 
@@ -165,7 +165,7 @@ namespace Characters.Weapons
             // pick first weapon from top row, or null if none
             for (var c = 0; c < Inventory.InventoryGridRuntime.Cols; c++)
             {
-                var item = _character.StatsHub.Inventory.Get(0, c) as WeaponDefinition;
+                var item = _character.Inventory.UI_Get(0, c) as WeaponDefinition;
                 if (item)
                 {
                     Equip(item);

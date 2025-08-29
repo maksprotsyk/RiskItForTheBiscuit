@@ -17,18 +17,8 @@ namespace Characters.Weapons
         {
             if (((1 << col.gameObject.layer) & _hurtLayers.value) == 0) return;
 
-            // 1) Prefer a custom receiver if present
-            var receiver = col.GetComponentInParent<IDamageReceiver>();
-            if (receiver != null)
-            {
-                receiver.ReceiveDamage(_payload);
-                return;
-            }
-
-            // 2) Fallback to HealthComponent directly
             float amount = _payload.Amount;
-
-            var health = col.GetComponentInParent<HealthComponent>();
+            var health = col.GetComponentInParent<CharacterBase>().Health;
             health?.TakeDamage(amount);
         }
     }

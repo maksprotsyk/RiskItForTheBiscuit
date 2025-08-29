@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 9874709bfe488a148803969bfe8fd0fd, type: 3}
   m_Name: WPN_Fireball
-  m_EditorClassIdentifier: Assembly-CSharp:Items:WeaponDefinition
-  Name: Fireball
+  m_EditorClassIdentifier: 
+  Name: 
   Description: 
   Icon: {fileID: 0}
   Rarity: 0
   Modifiers: []
-  Logic: {fileID: 11400000, guid: b5624d79500d4a340b4b3e127ae20779, type: 2}
+  Logic: {fileID: 0}
   Damage: 10
   Cooldown: 0.5
-  Range: 6
-  Speed: 12
-  ProjectilePrefab: {fileID: 7032444853151934704, guid: ac526445065abe8419e2c28cfb609618, type: 3}
+  Range: 1
+  Speed: 10
+  ProjectilePrefab: {fileID: 0}
   FireEventName: HitOn
   StopEventName: HitOff

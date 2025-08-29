@@ -83,15 +83,7 @@ namespace Characters.Weapons
                         rb.AddForce(dir * _logic.Force, ForceMode2D.Impulse);
                     }
 
-                    // Damage via receiver or Health fallback
-                    var receiver = col.GetComponentInParent<IDamageReceiver>();
-                    if (receiver != null)
-                    {
-                        receiver.ReceiveDamage(payload);
-                        continue;
-                    }
-
-                    var health = col.GetComponentInParent<HealthComponent>();
+                    var health = col.GetComponentInParent<CharacterBase>().Health;
                     if (health != null) health.TakeDamage(payload.Amount);
                 }
             }
