@@ -30,14 +30,14 @@ namespace Characters.AI
         {
             _attackRangeCheckTimer -= deltaTime;
 
-            if (_attackRangeCheckTimer <= 0 || _character.Attack.AttackIsReady())
+            if (_attackRangeCheckTimer <= 0 || _character.Weapon.AttackIsReady())
             {
                 ResetAttackRangeCheckTimer();
-                if (!_character.Attack.IsInAttackRange(_playerCharacter))
+                if (!_character.Weapon.IsInRange(_playerCharacter))
                 {
                     return AIState.Chasing;
                 }
-                _character.Attack.PerformAttack();
+                _character.Weapon.PerformAttack();
             }
 
             return base.OnUpdate(deltaTime);

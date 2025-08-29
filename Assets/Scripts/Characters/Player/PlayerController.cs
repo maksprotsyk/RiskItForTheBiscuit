@@ -30,7 +30,7 @@ namespace Characters.Player
             RemoveListeners();
 
             _inputReader.MoveEvent += _character.Movement.SetMovementDirection;
-            _inputReader.AttackEvent += _character.Attack.PerformAttack;
+            _inputReader.AttackEvent += _character.Weapon.PerformAttack;
             _inputReader.RunningState += _character.Movement.SetRunningState;
         }
 
@@ -39,7 +39,7 @@ namespace Characters.Player
         private void RemoveListeners()
         {
             _inputReader.MoveEvent -= _character.Movement.SetMovementDirection;
-            _inputReader.AttackEvent -= _character.Attack.PerformAttack;
+            _inputReader.AttackEvent -= _character.Weapon.PerformAttack;
             _inputReader.RunningState -= _character.Movement.SetRunningState;
         }
 		

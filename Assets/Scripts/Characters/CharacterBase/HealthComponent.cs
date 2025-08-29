@@ -1,5 +1,4 @@
 using System;
-using Characters.Stats;
 using DataStorage.Generated;
 using UnityEngine;
 

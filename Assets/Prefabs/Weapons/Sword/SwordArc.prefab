@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1943222791220409791}
   - component: {fileID: 2126785091070235181}
   - component: {fileID: 986526623145921528}
-  - component: {fileID: 8361912491199976262}
+  - component: {fileID: 986767900502895438}
   m_Layer: 0
-  m_Name: SwordProjectile
+  m_Name: SwordArc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8361912491199976262
+--- !u!114 &986767900502895438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,6 +140,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7032444853151934704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d3f77bcfffb3c54287073ef56b44ba2, type: 3}
+  m_Script: {fileID: 11500000, guid: 9fe0eeed15e94224b6e1ba5e5d7f3f06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hurtLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295

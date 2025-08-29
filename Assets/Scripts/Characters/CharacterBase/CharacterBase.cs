@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Characters.Inventory;
+using Characters.Weapons;
 using UnityEngine;
 
 namespace Characters
@@ -7,7 +8,7 @@ namespace Characters
     public class CharacterBase : MonoBehaviour
     {
         [SerializeField] private MovementComponent _movementComponent;
-        [SerializeField] private AttackComponent _attackComponent;
+        [SerializeField] private WeaponController _weaponController;
         [SerializeField] private HealthComponent _healthComponent;
         [SerializeField] private CharacterStatsHub _statsHubComponent;
         [SerializeField] private InventoryComponent _inventoryComponent;
@@ -16,22 +17,15 @@ namespace Characters
         private List<ICharacterComponent> _characterComponents;
 
         public MovementComponent Movement => _movementComponent;
-        public AttackComponent Attack => _attackComponent;
+        public WeaponController Weapon => _weaponController;
         public HealthComponent Health => _healthComponent;
         public CharacterStatsHub StatsHub => _statsHubComponent;
         public InventoryComponent Inventory => _inventoryComponent;
 
         public CharacterAnimationController AnimationController => _animationController;
 
-        public void OnAttackAnimationStarted()
-        {
-            _attackComponent.SetProjectileState(true);
-        }
-
-        public void OnAttackAnimationFinished()
-        {
-            _attackComponent.SetProjectileState(false);
-        }
+        public void OnAttackAnimationStarted() { _weaponController.HandleAnimationEvent("HitOn"); }
+        public void OnAttackAnimationFinished() { _weaponController.HandleAnimationEvent("HitOff"); }
 
         public void OnDeathAnimationFinished()
         {
@@ -48,7 +42,7 @@ namespace Characters
             }
             _animationController = new CharacterAnimationController(animator);
 
-            _characterComponents = new List<ICharacterComponent> {_statsHubComponent, _inventoryComponent, _movementComponent, _attackComponent, _healthComponent };
+            _characterComponents = new List<ICharacterComponent> {_statsHubComponent, _inventoryComponent, _movementComponent, _weaponController, _healthComponent };
             foreach (ICharacterComponent comp in _characterComponents)
             {
                 comp.Init(this);

@@ -42,7 +42,7 @@ namespace Characters.AI
         {
             _pathRecalculationTimer -= deltaTime;
             
-            if (_character.Attack.IsInAttackRange(_playerCharacter))
+            if (_character.Weapon.IsInRange(_playerCharacter))
             {
                 return AIState.Attacking;
             }

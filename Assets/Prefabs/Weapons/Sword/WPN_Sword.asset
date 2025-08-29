@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: WPN_Sword
+  m_EditorClassIdentifier: Assembly-CSharp:Items:WeaponDefinition
+  Name: Sword
+  Description: 
+  Icon: {fileID: 0}
+  Rarity: 0
+  Modifiers: []
+  Logic: {fileID: 11400000, guid: 509a1dbd4a080d24db7cdfc5bc85e5ff, type: 2}
+  Damage: 10
+  Cooldown: 0.5
+  Range: 1
+  Speed: 10
+  ProjectilePrefab: {fileID: 7032444853151934704, guid: 00c17e477edd80346a038371adc26ac8, type: 3}
+  FireEventName: HitOn
+  StopEventName: HitOff

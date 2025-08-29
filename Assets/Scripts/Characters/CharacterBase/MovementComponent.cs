@@ -53,7 +53,7 @@ namespace Characters
                 var animDir = CalculateAnimationDirection(direction);
                 _character.AnimationController.SetParameter(AnimationParameters.LookX, animDir.x);
                 _character.AnimationController.SetParameter(AnimationParameters.LookY, animDir.y);
-                _character.Attack.SetAttackDirection(MovementDirection);
+                _character.Weapon.SetAimDirection(MovementDirection);
             }
 
             UpdateMovingState();

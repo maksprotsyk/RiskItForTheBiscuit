@@ -119,6 +119,16 @@ namespace Characters.Inventory
                     if (_grid[r, c]) list.Add((r, c, _grid[r, c]));
             return list;
         }
+        
+        public ItemDefinition FirstWeaponInTopRow()
+        {
+            for (var c = 0; c < Cols; c++)
+            {
+                var item = _grid[0, c];
+                if (item is WeaponDefinition) return item;
+            }
+            return null;
+        }
 
         // -------- internals --------
 
@@ -127,8 +137,8 @@ namespace Characters.Inventory
         /// <summary>Top row (row 0) allows Weapons; rows 1-2 allow Passives.</summary>
         private static bool Accepts(int row, ItemDefinition item)
         {
-            if (row == 0) return item.GetType() == typeof(WeaponDefinition); // row 0
-            return item.GetType() == typeof(PassiveItemDefinition); // rows 1 and 2
+            if (row == 0) return item is WeaponDefinition; // row 0
+            return item is PassiveItemDefinition; // rows 1 and 2
         }
 
         private void ApplyPersistent(ItemDefinition item, bool apply)

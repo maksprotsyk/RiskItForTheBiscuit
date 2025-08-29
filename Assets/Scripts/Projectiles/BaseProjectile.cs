@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Projectiles
 {
-    public class BaseProjectile : MonoBehaviour, IDamageWriter
+    public class BaseProjectile : MonoBehaviour
     {
         private float _damage = 10f;
 
