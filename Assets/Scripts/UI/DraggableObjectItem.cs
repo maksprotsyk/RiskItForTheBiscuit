@@ -42,6 +42,7 @@ public class DraggableObjectItem : MonoBehaviour
         if (isUIHit)
         {
             dragIcon.GetComponent<DraggableUIItem>().OnUIDrop();
+            Destroy(gameObject);
         }
         else
         {

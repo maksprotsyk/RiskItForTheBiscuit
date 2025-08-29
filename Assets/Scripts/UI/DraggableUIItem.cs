@@ -23,6 +23,9 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
         Debug.Log("Begin UI drag");
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
@@ -34,13 +37,18 @@ public class DraggableUIItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
         // Debug.Log("Dragging UI");
         transform.position = Input.mousePosition;
-        
     }
 
     public void OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
         Debug.Log("End UI drag");
 
         OnUIDrop();

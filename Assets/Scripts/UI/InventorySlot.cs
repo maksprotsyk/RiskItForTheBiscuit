@@ -47,6 +47,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             slotItem = itemTransform.gameObject;
             slotItem.GetComponent<DraggableUIItem>().OnBeginDragEvent += HandleObjectBeginDrag;
             slotItem.GetComponent<DraggableUIItem>().OnEndDragEvent += HandleObjectEndDrag;
+            slotItem.GetComponent<PickupItem>().OnItemConsumeEvent += HandleObjectConsume;
 
             bool isPlaced = InventoryComp.UI_TryPlace(slotItem.GetComponent<PickupItem>().ItemDescription, row, column);
             if (!isPlaced)
@@ -79,6 +80,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             slotItem = droppedObject;
             slotItem.GetComponent<DraggableUIItem>().OnBeginDragEvent += HandleObjectBeginDrag;
             slotItem.GetComponent<DraggableUIItem>().OnEndDragEvent += HandleObjectEndDrag;
+            pickupComp.OnItemConsumeEvent += HandleObjectConsume;
             Debug.Log("Successfully placed an item in the slot[" + row + "," + column + "]");
         }
         else
@@ -105,6 +107,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
                 // We moved the item to another slot
                 slotItem.GetComponent<DraggableUIItem>().OnBeginDragEvent -= HandleObjectBeginDrag;
                 slotItem.GetComponent<DraggableUIItem>().OnEndDragEvent -= HandleObjectEndDrag;
+                slotItem.GetComponent<PickupItem>().OnItemConsumeEvent -= HandleObjectConsume;
 
                 // Check which slot we dropped on
                 GraphicRaycaster raycaster = GetComponentInParent<Canvas>().GetComponent<GraphicRaycaster>();
@@ -137,13 +140,38 @@ public class InventorySlot : MonoBehaviour, IDropHandler
                 }
 
                 slotItem = null;
-                Debug.Log("Moved an item to another slot");
+                //Debug.Log("Moved an item to another slot");
                 return;
             }
         }
 
         isCurrentItemInDrag = false;
-        Debug.Log("Moved an item to same slot");
+        //Debug.Log("Moved an item to same slot");
+    }
+
+    void HandleObjectConsume()
+    {
+        if (InventoryComp.UI_TryConsume(row, column))
+        {
+            slotItem.GetComponent<DraggableUIItem>().OnBeginDragEvent -= HandleObjectBeginDrag;
+            slotItem.GetComponent<DraggableUIItem>().OnEndDragEvent -= HandleObjectEndDrag;
+            slotItem.GetComponent<PickupItem>().OnItemConsumeEvent -= HandleObjectConsume;
+
+            bool isRemoved = InventoryComp.UI_TryRemove(row, column);
+            if (isRemoved)
+            {
+                Debug.Log("Successfully removed an item in the slot[" + row + "," + column + "]");
+            }
+            else
+            {
+                Debug.Log("Failed to remove an item in the slot[" + row + "," + column + "]");
+            }
+
+            // We destroy objects on consume
+            Destroy(slotItem);
+            slotItem = null;
+            Debug.Log("Consumed an item in the slot[" + row + "," + column + "]");
+        }
     }
 
     public bool IsPointerOver(PointerEventData eventData)

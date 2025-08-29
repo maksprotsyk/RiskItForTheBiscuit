@@ -1,5 +1,9 @@
 using UnityEngine;
 using Characters.Player;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using Items;
 
 namespace Managers
 {
@@ -7,7 +11,9 @@ namespace Managers
     {
         private LayerMask _targetLayer;
         private PlayerController _playerController;
-		
+        private Canvas canvas;
+        private GraphicRaycaster raycaster;
+
         public PlayerController PlayerController
 		{
             get
@@ -25,6 +31,12 @@ namespace Managers
             _targetLayer = LayerMask.GetMask("Drag");
         }
 
+        private void Start()
+        {
+            canvas = FindObjectOfType<Canvas>();
+            raycaster = canvas.GetComponent<GraphicRaycaster>();
+        }
+
         void Update()
         {
             // Left Mouse Down
@@ -37,6 +49,12 @@ namespace Managers
             if (Input.GetMouseButtonUp(0))
             {
                 OnMouseLeftButtonEvent(false);
+            }
+
+            // Right Mouse Down
+            if (Input.GetMouseButtonDown(1))
+            {
+                OnMouseRightButtonEvent(true);
             }
         }
 
@@ -66,6 +84,26 @@ namespace Managers
             else
             {
                 dragComponent.OnMouseUpHandle();
+            }
+        }
+
+        void OnMouseRightButtonEvent(bool isDown)
+        {
+            PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
+            {
+                position = Input.mousePosition
+            };
+
+            List<RaycastResult> results = new List<RaycastResult>();
+            raycaster.Raycast(pointerEventData, results);
+
+            foreach (var result in results)
+            {
+                PickupItem pickupComponent = result.gameObject.GetComponent<PickupItem>();
+                if (pickupComponent)
+                {
+                    pickupComponent.OnMouseRightButton(pointerEventData);
+                }
             }
         }
     }

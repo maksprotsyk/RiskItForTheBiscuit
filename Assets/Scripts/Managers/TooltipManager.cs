@@ -16,6 +16,8 @@ namespace Managers
     {
         GameObject tooltip;
         public TextMeshProUGUI TooltipTitleText;
+        public TextMeshProUGUI TooltipDescText;
+        public Image TooltipSprite;
 
         // Mouse hover logic variables
         private Canvas canvas;
@@ -37,7 +39,17 @@ namespace Managers
             // Set tooltip info about object
             if (TooltipTitleText)
             {
-                TooltipTitleText.SetText(itemDescription.Description);
+                TooltipTitleText.SetText(itemDescription.Name);
+            }
+
+            if (TooltipDescText)
+            {
+                TooltipDescText.SetText(itemDescription.Description);
+            }
+
+            if (TooltipSprite)
+            {
+                TooltipSprite.sprite = itemDescription.Icon;
             }
         }
 
