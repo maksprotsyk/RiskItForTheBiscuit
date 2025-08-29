@@ -35,7 +35,7 @@ namespace Characters.AI
 
         public override void OnEnter()
         {
-            _character.Movement.SetRunningState(_runWhileChasing);
+            _character.Movement.SetPrefferedMovingState(_runWhileChasing ? MovementComponent.MovingState.Running: MovementComponent.MovingState.Walking);
         }
 
         public override AIState OnUpdate(float deltaTime)
@@ -61,7 +61,7 @@ namespace Characters.AI
         public override void OnExit()
         {
             _agent.ResetPath();
-            _character.Movement.SetMovementDirection(Vector3.zero);
+            _character.Movement.SetPrefferedMovingState(MovementComponent.MovingState.Idle);
         }
 
         private bool HasArrivedAtDestination()
@@ -92,10 +92,9 @@ namespace Characters.AI
                 return;
             }
 
-            // Updating speed of the NavAgent according to state of the character
-            _agent.speed = Mathf.Max(0.01f, _character.Movement.CurrentSpeed);
+            _agent.speed = _character.Movement.CurrentSpeed;
             Vector3 targetVelocity = _agent.desiredVelocity.normalized;
-            _character.Movement.SetMovementDirection(targetVelocity);
+            _character.Movement.SetLookDirection(targetVelocity);
         }
     }
 

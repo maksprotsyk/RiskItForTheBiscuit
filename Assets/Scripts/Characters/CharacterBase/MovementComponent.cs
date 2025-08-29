@@ -27,9 +27,9 @@ namespace Characters
         private float _staminaDepletionThreshold;
 
         private MovingState _currentState;
-        private bool _isRunningRequested;
+        private MovingState _requestedState;
+
         private bool _isDepleted;
-        private bool _isMoving;
 
         public float Stamina { get; private set; }
 
@@ -40,28 +40,26 @@ namespace Characters
             _ => 0f
         };
 
-        public Vector2 MovementDirection { get; private set; }
+        public Vector2 LookDirection { get; private set; } = Vector2.up;
 
-        public void SetMovementDirection(Vector2 direction)
+        public void SetLookDirection(Vector2 direction)
         {
-            _isMoving = direction.sqrMagnitude > 0.0001f;
-
-            if (_isMoving && !_character.Health.IsDead)
+            if (_character.Health.IsDead || direction.sqrMagnitude < float.Epsilon)
             {
-                MovementDirection = direction.normalized;
-
-                var animDir = CalculateAnimationDirection(direction);
-                _character.AnimationController.SetParameter(AnimationParameters.LookX, animDir.x);
-                _character.AnimationController.SetParameter(AnimationParameters.LookY, animDir.y);
-                _character.Weapon.SetAimDirection(MovementDirection);
+                return;
             }
 
-            UpdateMovingState();
+            LookDirection = direction.normalized;
+
+            var animDir = CalculateAnimationDirection(direction);
+            _character.AnimationController.SetParameter(AnimationParameters.LookX, animDir.x);
+            _character.AnimationController.SetParameter(AnimationParameters.LookY, animDir.y);
+            _character.Weapon.SetAimDirection(LookDirection);
         }
 
-        public void SetRunningState(bool isRunningRequested)
+        public void SetPrefferedMovingState(MovingState state)
         {
-            _isRunningRequested = isRunningRequested;
+            _requestedState = state;
             UpdateMovingState();
         }
 
@@ -72,10 +70,7 @@ namespace Characters
             if (!_rigidBody) Debug.LogError("MovementComponent requires Rigidbody2D.", characterBase);
 
             _currentState = MovingState.Idle;
-            MovementDirection = Vector2.zero;
-            _isRunningRequested = false;
-            _isMoving = false;
-            _isDepleted = false;
+            _requestedState = MovingState.Idle;
         }
 
         public override void OnStart()
@@ -117,7 +112,7 @@ namespace Characters
         public override void FixedUpdateComponent(float fixedDeltaTime)
         {
             if (!_rigidBody) return;
-            _rigidBody.velocity = CurrentSpeed * MovementDirection;
+            _rigidBody.velocity = CurrentSpeed * LookDirection;
         }
         protected override void AddListeners()
         {
@@ -137,12 +132,14 @@ namespace Characters
                 return;
             }
 
-            if (_isRunningRequested && !_isDepleted && _isMoving)
-                _currentState = MovingState.Running;
-            else if (_isMoving)
+            if (_requestedState == MovingState.Running && _isDepleted)
+            {
                 _currentState = MovingState.Walking;
+            }
             else
-                _currentState = MovingState.Idle;
+            {
+                _currentState = _requestedState;
+            }
         }
 
         private void OnStatChanged(StatsDef stat)

@@ -24,11 +24,13 @@ namespace Characters.AI
         public override void OnEnter()
         {
             _attackRangeCheckTimer = Random.Range(0.0f, AttackRangeCheckDelay);
+            _character.Movement.SetPrefferedMovingState(MovementComponent.MovingState.Idle);
         }
 
         public override AIState OnUpdate(float deltaTime)
         {
             _attackRangeCheckTimer -= deltaTime;
+            _character.Movement.SetLookDirection(_playerCharacter.transform.position - _character.transform.position);
 
             if (_attackRangeCheckTimer <= 0 || _character.Weapon.AttackIsReady())
             {
