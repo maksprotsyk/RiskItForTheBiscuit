@@ -1151,6 +1151,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4669384837570352941, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
+      propertyPath: ItemDescription
+      value: 
+      objectReference: {fileID: 11400000, guid: 3df48840efc8d7948a9d0a7f3cf7b4f4, type: 2}
     - target: {fileID: 6495429892694957252, guid: 6556279602552ca4a83d9e02c8e39cb0, type: 3}
       propertyPath: m_Name
       value: SceneItem (1)
@@ -2090,7 +2094,7 @@ PrefabInstance:
     - target: {fileID: 1404586638395258807, guid: 80d527a9f22867b42869d00083bd2ca3, type: 3}
       propertyPath: ItemDescription
       value: 
-      objectReference: {fileID: 11400000, guid: 50e81d5101a087348916ddeb5f97df78, type: 2}
+      objectReference: {fileID: 11400000, guid: 5210a0f0c95561e418b0aa61fcc3a892, type: 2}
     - target: {fileID: 9090874318058236876, guid: 80d527a9f22867b42869d00083bd2ca3, type: 3}
       propertyPath: m_Name
       value: InventoryItem
