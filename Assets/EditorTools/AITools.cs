@@ -104,5 +104,98 @@ namespace Characters.AI
             _requiresInitialization = true;
         }
     }
+
+    [CustomPropertyDrawer(typeof(AIStateChangeConditionWrapper))]
+    public class AIStateChangeConditionWrapperDrawer : PropertyDrawer
+    {
+        private static List<Type> _stateChangeConditions;
+        private static bool _requiresInitialization = true;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            // Start the property
+            EditorGUI.BeginProperty(position, label, property);
+
+            if (_requiresInitialization)
+            {
+                _stateChangeConditions = GetStateChangeConditionTypes();
+                _requiresInitialization = false;
+
+                EditorApplication.projectChanged -= RequestInitialization;
+                EditorApplication.projectChanged += RequestInitialization;
+
+            }
+
+            var stateChangeConditionProperty = property.FindPropertyRelative(nameof(AIStateChangeConditionWrapper.Condition));
+
+            Rect dropdownRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+            Rect contentRect = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, position.width, position.height - EditorGUIUtility.singleLineHeight - 2);
+ 
+            if (stateChangeConditionProperty.managedReferenceValue == null)
+            {
+                if (GUI.Button(dropdownRect, "Select Condition Type") && _stateChangeConditions.Count > 0)
+                {
+                    // Show a dropdown menu to select the state type
+                    GenericMenu menu = new();
+                    foreach (var type in _stateChangeConditions)
+                    {
+                        menu.AddItem(new GUIContent(type.Name), false, () =>
+                        {
+                            stateChangeConditionProperty.managedReferenceValue = Activator.CreateInstance(type);
+                            property.serializedObject.ApplyModifiedProperties();
+                        });
+                    }
+                    menu.ShowAsContext();
+                }
+            }
+            else
+            {
+                // Display the selected state's type
+                EditorGUI.LabelField(dropdownRect, stateChangeConditionProperty.managedReferenceValue.GetType().Name);
+
+                // Draw the fields of the selected state using a property field
+                EditorGUI.PropertyField(contentRect, stateChangeConditionProperty, true);
+
+                // Allow the user to clear the current selection
+                if (GUI.Button(new Rect(position.x + position.width - 100, position.y, 90, EditorGUIUtility.singleLineHeight), "Clear State"))
+                {
+                    stateChangeConditionProperty.managedReferenceValue = null;
+                    property.serializedObject.ApplyModifiedProperties();
+                }
+            }
+
+            // End the property
+            EditorGUI.EndProperty();
+        }
+
+        // Override GetPropertyHeight to account for dynamic height of the property
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            SerializedProperty stateLogicProperty = property.FindPropertyRelative(nameof(AIStateChangeConditionWrapper.Condition));
+
+            float height = EditorGUIUtility.singleLineHeight + 4;
+
+            if (stateLogicProperty.managedReferenceValue != null)
+            {
+                height += EditorGUI.GetPropertyHeight(stateLogicProperty, true);
+            }
+
+            return height;
+        }
+
+        private static List<Type> GetStateChangeConditionTypes()
+        {
+            Type interfaceType = typeof(IAIStateChangeCondition);
+            return interfaceType.Assembly
+                .GetTypes()
+                .Where(t => interfaceType.IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+                .ToList();
+        }
+
+        private static void RequestInitialization()
+        {
+            _requiresInitialization = true;
+        }
+    }
 #endif
 }
