@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Characters.AI
 {
-    public enum EnemyWaveDifficulty
+    public enum WaveDifficulty
     {
         Easy,
         Medium,
@@ -13,10 +13,10 @@ namespace Characters.AI
     }
 
     [CreateAssetMenu(menuName = "Enemies/Wave")]
-    public class EnemiesWaveDefinition : ScriptableObject
+    public class WaveDefinition : ScriptableObject
     {
         [Tooltip("Wave difficulty to calculate rewards / give player time to relax")]
-        public EnemyWaveDifficulty Difficulty;
+        public WaveDifficulty Difficulty;
 
         public SerializedDictionary<Enemies, int> GuaranteedEnemies;
         public SerializedDictionary<Enemies, float> EnemySpawnProbabilities;

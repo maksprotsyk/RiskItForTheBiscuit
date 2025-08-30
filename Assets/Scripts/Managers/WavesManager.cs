@@ -5,30 +5,25 @@ using System.Collections.Generic;
 using System.Collections;
 using DataStorage.Generated;
 using System.Linq;
-using System;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Managers
 {
 
-    public class EnemyWavesManager : MonoBehaviour
+    public class WavesManager : MonoBehaviour
     {
         [SerializeField] private IDataContainer<EnemiesTableRow> _enemiesData;
-        [SerializeField] private EnemiesWaveDefinition[] _waves;
+        [SerializeField] private List<Transform> _enemySpawnPoints;
+
+        [SerializeField] private WaveDefinition[] _waves;
         [SerializeField] private float _delayBetweenWaves = 5f;
 
         [Tooltip("Each cycle contains random waves of the given difficulties, after that the number of enemies increases")]
-        [SerializeField] private List<EnemyWaveDifficulty> _wavesCycleDifficulties;
+        [SerializeField] private List<WaveDifficulty> _wavesCycleDifficulties;
         [SerializeField] private float _enemyNumberIncreaseFactorPerCycle = 0.2f;
 
-        // TODO: think about something better
-        private float _enemySpawnDistance = 10.0f;
-
-        private int _currentWave = 0;
         private Transform _playerTransform;
+        private int _currentWave = 0;
         private float _currentEnemyNumberMultiplier = 1f;
-
-        //private List<CharacterBase> _aliveEnemies = new List<CharacterBase>();
 
         private void Start()
         {
@@ -38,15 +33,15 @@ namespace Managers
 
         private void StartNextWave()
         {
-            EnemyWaveDifficulty enemyWaveDifficulty = _wavesCycleDifficulties[_currentWave];
-            List<EnemiesWaveDefinition> possibleWaves = _waves.Where(w => w.Difficulty == enemyWaveDifficulty).ToList();
+            WaveDifficulty enemyWaveDifficulty = _wavesCycleDifficulties[_currentWave];
+            List<WaveDefinition> possibleWaves = _waves.Where(w => w.Difficulty == enemyWaveDifficulty).ToList();
             if (possibleWaves.Count == 0)
             {
                 Debug.LogError($"No waves of difficulty {enemyWaveDifficulty}");
                 return;
             }
 
-            EnemiesWaveDefinition selectedWave = possibleWaves[UnityEngine.Random.Range(0, possibleWaves.Count)];
+            WaveDefinition selectedWave = possibleWaves[UnityEngine.Random.Range(0, possibleWaves.Count)];
             int randomEnemyCount = UnityEngine.Random.Range(selectedWave.MinRandomEnemyCount, selectedWave.MaxRandomEnemyCount + 1);
             randomEnemyCount = Mathf.CeilToInt(randomEnemyCount * _currentEnemyNumberMultiplier);
             float randomEnemySpawnDelay = selectedWave.RandomEnemiesSpawnInterval / _currentEnemyNumberMultiplier;
@@ -139,16 +134,28 @@ namespace Managers
 
             Vector3 spawnPosition = GetRandomEnemySpawnPosition();
             Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            //Debug.Log($"Spawned enemy {enemy} at {spawnPosition}");
         }
 
-        // TODO: avoid collisions with other objects
         private Vector3 GetRandomEnemySpawnPosition()
         {
-            float x = UnityEngine.Random.Range(-1f, 1f);
-            float y = UnityEngine.Random.Range(-1f, 1f);
-            Vector3 direction = new Vector3(x, y, 0).normalized;
-            return _playerTransform.position + direction * _enemySpawnDistance;
+            if (_enemySpawnPoints.Count == 0)
+            {
+                Debug.LogError("No enemy spawn points");
+                return Vector3.zero;
+            }
+
+            if (_enemySpawnPoints.Count == 1)
+            {
+                Debug.LogError("There is only one spawn point");
+                return _enemySpawnPoints[0].position;
+            }
+
+            List<Transform> possibleSpawnPoints = new List<Transform>(_enemySpawnPoints);
+            possibleSpawnPoints.Sort((a, b) => Vector3.Distance(a.position, _playerTransform.position).CompareTo(Vector3.Distance(b.position, _playerTransform.position)));
+            possibleSpawnPoints.RemoveAt(0); // remove the closest
+            return possibleSpawnPoints[UnityEngine.Random.Range(0, possibleSpawnPoints.Count)].position;
+
+
         }
 
 

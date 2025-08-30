@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 790685c7e3ebe5743be36abc8ea8b822, type: 3}
+  m_Script: {fileID: 11500000, guid: 69403abcefd4a4b47ac89434891dc460, type: 3}
   m_Name: EasyEnemyWave
   m_EditorClassIdentifier: 
   Difficulty: 0
@@ -24,31 +24,10 @@ MonoBehaviour:
     - Key:
         _id: Slime3
       Value: 1
-    - Key:
-        _id: Beholder1
-      Value: 1
-    - Key:
-        _id: Beholder2
-      Value: 1
-    - Key:
-        _id: Beholder3
-      Value: 1
-    - Key:
-        _id: Vampire1
-      Value: 1
-    - Key:
-        _id: Vampire2
-      Value: 1
-    - Key:
-        _id: Vampire3
-      Value: 1
   EnemySpawnProbabilities:
-    _serializedList:
-    - Key:
-        _id: Slime1
-      Value: 1
-  MinRandomEnemyCount: 1
-  MaxRandomEnemyCount: 5
-  RandomEnemiesSpawnInterval: 4
-  GuarantedEnemiesSpawnInterval: 2
-  WaveDuration: 30
+    _serializedList: []
+  MinRandomEnemyCount: 5
+  MaxRandomEnemyCount: 10
+  RandomEnemiesSpawnInterval: 2
+  GuarantedEnemiesSpawnInterval: 1
+  WaveDuration: 60

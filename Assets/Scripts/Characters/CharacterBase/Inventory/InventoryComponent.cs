@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Items;
 using System;
+using UnityEngine;
 
 namespace Characters.Inventory
 {
@@ -9,6 +10,9 @@ namespace Characters.Inventory
     [Serializable]
     public class InventoryComponent : BaseCharacterComponent
     {
+        [SerializeField]
+        private ItemDefinition _initialWeapon;
+
         private InventoryGridRuntime _runtime;
 
         public event Action OnChanged; // expose to UI if you want to subscribe directly
@@ -19,6 +23,10 @@ namespace Characters.Inventory
             base.Init(characterBase);
 
             _runtime = new InventoryGridRuntime(characterBase.StatsHub);
+            if (_initialWeapon && !_runtime.TryPlace(_initialWeapon, 0, 0))
+            {
+                Debug.LogError("InventoryComponent: Failed to place initial weapon in inventory.");
+            }
             _runtime.OnChanged += () => OnChanged?.Invoke();
         }
 
