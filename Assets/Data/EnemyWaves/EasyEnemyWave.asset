@@ -19,18 +19,33 @@ MonoBehaviour:
         _id: Slime1
       Value: 1
     - Key:
+        _id: Beholder1
+      Value: 1
+    - Key:
+        _id: Beholder2
+      Value: 1
+    - Key:
+        _id: Beholder3
+      Value: 1
+    - Key:
+        _id: Vampire1
+      Value: 1
+    - Key:
+        _id: Vampire2
+      Value: 1
+    - Key:
+        _id: Vampire3
+      Value: 1
+    - Key:
         _id: Slime2
       Value: 1
     - Key:
         _id: Slime3
       Value: 1
   EnemySpawnProbabilities:
-    _serializedList:
-    - Key:
-        _id: Vampire1
-      Value: 1
-  MinRandomEnemyCount: 5
-  MaxRandomEnemyCount: 10
+    _serializedList: []
+  MinRandomEnemyCount: 0
+  MaxRandomEnemyCount: 0
   RandomEnemiesSpawnInterval: 2
   GuarantedEnemiesSpawnInterval: 1
   WaveDuration: 60

@@ -25,3 +25,5 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 7032444853151934704, guid: 00c17e477edd80346a038371adc26ac8, type: 3}
   FireEventName: HitOn
   StopEventName: HitOff
+  AttackSound:
+    _id: SwordAttack1

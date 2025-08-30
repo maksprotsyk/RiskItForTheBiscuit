@@ -1,5 +1,4 @@
-﻿using System;
-using Characters.Combat;
+﻿using Characters.Combat;
 using DataStorage.Generated;
 using Items;
 using UnityEngine;
@@ -18,11 +17,20 @@ namespace Characters.Weapons
 
             private GameObject _activeHitbox;
             private Vector2 _aim = Vector2.up;
+            private float _projectileSpawnDistance;
 
             public Instance(WeaponRuntimeContext ctx)
             {
                 _ctx = ctx;
                 _def = ctx.Definition;
+                if (_def.ProjectilePrefab == null)
+                {
+                    Debug.LogWarning("MeleeArcLogic: missing ProjectilePrefab", ctx.Owner);
+                    return;
+                }
+
+                Vector2 projectileLocalPosition = _def.ProjectilePrefab?.transform?.position ?? Vector2.zero;
+                _projectileSpawnDistance = Mathf.Max(Mathf.Abs(projectileLocalPosition.x), Mathf.Abs(projectileLocalPosition.y));
             }
 
             public void OnEquip()
@@ -31,7 +39,7 @@ namespace Characters.Weapons
 
             public void Dispose()
             {
-                if (_activeHitbox) UnityEngine.Object.Destroy(_activeHitbox);
+                if (_activeHitbox) Object.Destroy(_activeHitbox);
                 _activeHitbox = null;
             }
 
@@ -46,45 +54,30 @@ namespace Characters.Weapons
                 /* animation-driven; spawn on HitOn */
             }
 
-            public void OnAnimEvent(string evt)
+            public void OnAnimationStart()
             {
-                string on = string.IsNullOrWhiteSpace(_def.FireEventName) ? "HitOn" : _def.FireEventName;
-                string off = string.IsNullOrWhiteSpace(_def.StopEventName) ? "HitOff" : _def.StopEventName;
+                if (_activeHitbox || !_def.ProjectilePrefab) return;
 
-                if (string.Equals(evt, on, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (_activeHitbox || !_def.ProjectilePrefab) return;
+                _activeHitbox = Object.Instantiate(_def.ProjectilePrefab, _ctx.Owner.transform);
+                PositionChild(_activeHitbox.transform, _aim, _projectileSpawnDistance, _ctx.ProjectileBaseOffset);
 
-                    _activeHitbox = UnityEngine.Object.Instantiate(_def.ProjectilePrefab, _ctx.Owner.transform);
-                    OrientChild(_activeHitbox.transform, _aim);
-
-                    var writer = _activeHitbox.GetComponent<IDamageWriter>();
-                    if (writer != null) writer.SetPayload(BuildPayload(_aim));
-                }
-                else if (string.Equals(evt, off, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (_activeHitbox)
-                    {
-                        UnityEngine.Object.Destroy(_activeHitbox);
-                        _activeHitbox = null;
-                    }
-                }
+                var writer = _activeHitbox.GetComponent<IDamageWriter>();
+                if (writer != null) writer.SetPayload(BuildPayload(_aim));
             }
 
             public void SetAim(Vector2 dir)
             {
                 if (dir.sqrMagnitude > 0.0001f) _aim = dir.normalized;
-                if (_activeHitbox) OrientChild(_activeHitbox.transform, _aim);
+                if (_activeHitbox) PositionChild(_activeHitbox.transform, _aim, _projectileSpawnDistance, _ctx.ProjectileBaseOffset);
             }
 
             public float GetEffectiveRange() => Mathf.Max(0f, _def.Range);
 
             // ---- helpers ----
-            private void OrientChild(Transform t, Vector2 dir)
+            private void PositionChild(Transform t, Vector2 dir, float projectileSpawnDistance, Vector2 ownerColliderOffset)
             {
                 float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                t.localPosition = dir * 0.5f; // tweak reach
-                t.localRotation = Quaternion.Euler(0, 0, angle - 90f);
+                t.SetLocalPositionAndRotation(dir * projectileSpawnDistance + ownerColliderOffset, Quaternion.Euler(0, 0, angle - 90f));
             }
 
             private DamagePayload BuildPayload(Vector2 dir)

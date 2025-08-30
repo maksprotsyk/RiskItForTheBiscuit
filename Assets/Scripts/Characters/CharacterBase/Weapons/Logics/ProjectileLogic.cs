@@ -47,10 +47,9 @@ namespace Characters.Weapons
                 if (!_logic.SpawnOnAnimEvent) Spawn();
             }
 
-            public void OnAnimEvent(string evt)
+            public void OnAnimationStart()
             {
-                if (_logic.SpawnOnAnimEvent &&
-                    string.Equals(evt, _def.FireEventName ?? "HitOn", StringComparison.OrdinalIgnoreCase))
+                if (_logic.SpawnOnAnimEvent)
                     Spawn();
             }
 

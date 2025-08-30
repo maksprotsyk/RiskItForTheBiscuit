@@ -171,6 +171,8 @@ MonoBehaviour:
       - Key:
           _id: StaminaDepletionThreshold
         Value: 30
+  _inventoryComponent:
+    _initialWeapon: {fileID: 11400000, guid: 5210a0f0c95561e418b0aa61fcc3a892, type: 2}
 --- !u!50 &4015687176000255276
 Rigidbody2D:
   serializedVersion: 4

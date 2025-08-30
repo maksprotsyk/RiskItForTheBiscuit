@@ -19,7 +19,7 @@ namespace Characters.Weapons
         void Fire();
 
         // Animation events from animator or CharacterBase hooks
-        void OnAnimEvent(string evt);
+        void OnAnimationStart();
 
         // Update current aim; weapon may re-orient projectiles/arc
         void SetAim(Vector2 dir);
@@ -35,8 +35,9 @@ namespace Characters.Weapons
         public readonly CharacterStatsHub StatsHub;
         public readonly Transform Origin; // usually Owner.transform
         public readonly Func<Vector2> AimProvider; // returns normalized aim dir
+        public readonly Vector2 ProjectileBaseOffset;
 
-        public WeaponRuntimeContext(CharacterBase owner, WeaponDefinition def, CharacterStatsHub hub, Transform origin,
+        public WeaponRuntimeContext(CharacterBase owner, WeaponDefinition def, CharacterStatsHub hub, Transform origin, Vector2 projectileBaseOffset,
             Func<Vector2> aimProvider)
         {
             Owner = owner;
@@ -44,6 +45,7 @@ namespace Characters.Weapons
             StatsHub = hub;
             Origin = origin;
             AimProvider = aimProvider;
+            ProjectileBaseOffset = projectileBaseOffset;
         }
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2126785091070235181}
   - component: {fileID: 986526623145921528}
   - component: {fileID: 986767900502895438}
+  - component: {fileID: 5684323886750065925}
   m_Layer: 0
   m_Name: SwordArc
   m_TagString: Untagged
@@ -146,3 +147,16 @@ MonoBehaviour:
   _hurtLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5684323886750065925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7032444853151934704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccee1d67e94ff2f46baaef85e50e8746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lifeDuration: 0.2

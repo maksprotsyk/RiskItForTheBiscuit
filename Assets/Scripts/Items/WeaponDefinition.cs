@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Characters.Weapons;
+using DataStorage.Generated;
 
 namespace Items
 {
@@ -18,10 +19,7 @@ namespace Items
         [Tooltip("Optional generic prefab used by some logics (e.g. melee hitbox or projectile)")]
         public GameObject ProjectilePrefab;
 
-        [Header("Animation")]
-        [Tooltip("Name of animation event to spawn/enable. Default: 'HitOn'")]
-        public string FireEventName = "HitOn";
-        [Tooltip("Name of animation event to disable. Default: 'HitOff'")]
-        public string StopEventName = "HitOff";
+        [Header("Audio")]
+        public SFXAssets AttackSound;
     }
 }

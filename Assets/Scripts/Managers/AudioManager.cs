@@ -189,6 +189,7 @@ namespace Managers
 
                 source.clip = sound.clip;
                 source.outputAudioMixerGroup = sound.mixerGroup;
+                source.volume = sound.volume;
                 source.loop = false;
                 source.Play();
 

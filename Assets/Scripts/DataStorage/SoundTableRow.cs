@@ -9,5 +9,6 @@ namespace DataStorage
     {
         public AudioClip clip;
         public AudioMixerGroup mixerGroup;
+        public float volume = 1.0f;
     }
 }

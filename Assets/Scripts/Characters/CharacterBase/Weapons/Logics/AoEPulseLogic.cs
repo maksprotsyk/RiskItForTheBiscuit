@@ -49,10 +49,9 @@ namespace Characters.Weapons
                 /* if not anim-driven, could call DoPulse() here */
             }
 
-            public void OnAnimEvent(string evt)
+            public void OnAnimationStart()
             {
-                if (string.Equals(evt, _def.FireEventName ?? "HitOn", StringComparison.OrdinalIgnoreCase))
-                    DoPulse();
+                DoPulse();
             }
 
             public void SetAim(Vector2 dir)

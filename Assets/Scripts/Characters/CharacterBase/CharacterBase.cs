@@ -24,8 +24,7 @@ namespace Characters
 
         public CharacterAnimationController AnimationController => _animationController;
 
-        public void OnAttackAnimationStarted() { _weaponController.HandleAnimationEvent("HitOn"); }
-        public void OnAttackAnimationFinished() { _weaponController.HandleAnimationEvent("HitOff"); }
+        public void OnAttackAnimationStarted() { _weaponController.HandleAnimatioStart(); }
 
         public void OnDeathAnimationFinished()
         {

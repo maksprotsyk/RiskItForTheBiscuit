@@ -1,5 +1,8 @@
 ﻿using System;
+using DataStorage;
+using DataStorage.Generated;
 using Items;
+using Managers;
 using UnityEngine;
 
 namespace Characters.Weapons
@@ -10,6 +13,9 @@ namespace Characters.Weapons
         [Header("Animation parameters")]
         [SerializeField] private AnimationParameters _attackTrigger = AnimationParameters.Attack; // reuse your constants
 
+        private Vector2 _attackBaseOffset;
+
+        private AudioManager _audioManager;
         private IWeaponInstance _instance;
         private WeaponDefinition _equipped;
         private Vector2 _aim = Vector2.up;
@@ -24,13 +30,15 @@ namespace Characters.Weapons
         {
             base.Init(characterBase);
             _cooldownTimer = 0f;
+            SpriteRenderer spriteRenderer = characterBase.GetComponent<SpriteRenderer>();
+            _attackBaseOffset = spriteRenderer.bounds.center - characterBase.transform.position;
         }
 
         public override void OnStart()
         {
             base.OnStart();
-            // Subscribe to inventory changes and equip first weapon on top row
-            _character.Inventory.OnChanged += SyncEquippedFromInventory;
+            _audioManager = ManagersOwner.GetManager<AudioManager>();
+
             SyncEquippedFromInventory(); // initial
             RebuildCache();
         }
@@ -38,7 +46,6 @@ namespace Characters.Weapons
         public override void OnDestroy()
         {
             base.OnDestroy();
-            _character.Inventory.OnChanged -= SyncEquippedFromInventory;
             Unequip();
         }
 
@@ -96,11 +103,12 @@ namespace Characters.Weapons
 
             // Animation-driven by default; still allow logic to fire immediately if it wants.
             _character.AnimationController.SetTrigger(_attackTrigger);
+            _audioManager.PlaySound(_equipped.AttackSound, _character.transform, (prevSound) => { return TableID.NONE; });
             _cooldownTimer = Mathf.Max(0f, _cooldownBase);
             _instance?.Fire();
         }
 
-        public void HandleAnimationEvent(string evt) => _instance?.OnAnimEvent(evt);
+        public void HandleAnimatioStart() => _instance?.OnAnimationStart();
 
         public void Equip(WeaponDefinition def)
         {
@@ -120,6 +128,7 @@ namespace Characters.Weapons
                 _equipped,
                 _character.StatsHub,
                 _character.transform,
+                _attackBaseOffset,
                 () => _aim
             );
 
@@ -140,11 +149,13 @@ namespace Characters.Weapons
         protected override void AddListeners()
         {
             _character.StatsHub.Stats.OnStatChanged += OnStatChanged;
+            _character.Inventory.OnChanged += SyncEquippedFromInventory;
         }
 
         protected override void RemoveListeners()
         {
             _character.StatsHub.Stats.OnStatChanged -= OnStatChanged;
+            _character.Inventory.OnChanged -= SyncEquippedFromInventory;
         }
 
         private void RebuildCache()
