@@ -2402,6 +2402,8 @@ GameObject:
   - component: {fileID: 1247353189}
   - component: {fileID: 1247353191}
   - component: {fileID: 1247353192}
+  - component: {fileID: 1247353193}
+  - component: {fileID: 1247353194}
   m_Layer: 0
   m_Name: ManagersOwner
   m_TagString: Untagged
@@ -2486,6 +2488,36 @@ MonoBehaviour:
   _delayBetweenWaves: 5
   _wavesCycleDifficulties: 00000000
   _enemyNumberIncreaseFactorPerCycle: 0.2
+--- !u!114 &1247353193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247353187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1dd9be04bd5ed84b90bbcb9344fce75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioMixer: {fileID: 24100000, guid: daf6ca941928f1549ab4136d0a3177de, type: 2}
+  _audioSourcePrefab: {fileID: 8957540551643416457, guid: f148bce0710b54dceb0717fdf7328388, type: 3}
+  _initialPoolSize: 10
+  _soundTable: {fileID: 11400000, guid: dda064b02d26c674ba01dc4d7c5adfff, type: 2}
+--- !u!114 &1247353194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247353187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a0177d9960fb64c975a987fa9e09ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _musicAssets:
+  - _id: Battle1
 --- !u!1 &1286298833
 GameObject:
   m_ObjectHideFlags: 0

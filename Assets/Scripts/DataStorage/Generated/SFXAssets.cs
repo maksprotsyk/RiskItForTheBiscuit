@@ -3,10 +3,11 @@ namespace DataStorage.Generated
     [System.Serializable]
     public class SFXAssets: TableID
     {
-        public static readonly SFXAssets Steps = new SFXAssets("Steps");
-        public static readonly SFXAssets Countdown = new SFXAssets("Countdown");
-        public static readonly SFXAssets BallHit = new SFXAssets("BallHit");
-        public static readonly SFXAssets GoalScore = new SFXAssets("GoalScore");
+        public static readonly SFXAssets OrcHurt1 = new SFXAssets("OrcHurt1");
+        public static readonly SFXAssets HumanHurt1 = new SFXAssets("HumanHurt1");
+        public static readonly SFXAssets OrcHurt2 = new SFXAssets("OrcHurt2");
+        public static readonly SFXAssets OrcHurt3 = new SFXAssets("OrcHurt3");
+        public static readonly SFXAssets SwordAttack1 = new SFXAssets("SwordAttack1");
         public SFXAssets(string id): base(id){}
     }
 #if UNITY_EDITOR

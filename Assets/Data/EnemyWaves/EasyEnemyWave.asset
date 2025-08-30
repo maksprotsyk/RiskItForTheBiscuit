@@ -25,7 +25,10 @@ MonoBehaviour:
         _id: Slime3
       Value: 1
   EnemySpawnProbabilities:
-    _serializedList: []
+    _serializedList:
+    - Key:
+        _id: Vampire1
+      Value: 1
   MinRandomEnemyCount: 5
   MaxRandomEnemyCount: 10
   RandomEnemiesSpawnInterval: 2

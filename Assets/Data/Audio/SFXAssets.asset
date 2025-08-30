@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e72158dbf216b429668ded9892a31d, type: 3}
+  m_Name: SFXAssets
+  m_EditorClassIdentifier: 
+  _data:
+    _serializedList:
+    - Key:
+        _id: OrcHurt1
+      Value:
+        clip: {fileID: 8300000, guid: 2209831c89fccef40947113f044242fe, type: 3}
+        mixerGroup: {fileID: -2844677377044231637, guid: daf6ca941928f1549ab4136d0a3177de, type: 2}
+    - Key:
+        _id: HumanHurt1
+      Value:
+        clip: {fileID: 8300000, guid: 6703c434c31be254895ccc784bd7405f, type: 3}
+        mixerGroup: {fileID: -2844677377044231637, guid: daf6ca941928f1549ab4136d0a3177de, type: 2}
+    - Key:
+        _id: OrcHurt2
+      Value:
+        clip: {fileID: 8300000, guid: f68b23e8f71bfb946aae5b924a8b481c, type: 3}
+        mixerGroup: {fileID: -2844677377044231637, guid: daf6ca941928f1549ab4136d0a3177de, type: 2}
+    - Key:
+        _id: OrcHurt3
+      Value:
+        clip: {fileID: 8300000, guid: 46c5472a0a3803a4ebddfaaa904887ae, type: 3}
+        mixerGroup: {fileID: -2844677377044231637, guid: daf6ca941928f1549ab4136d0a3177de, type: 2}
+    - Key:
+        _id: SwordAttack1
+      Value:
+        clip: {fileID: 8300000, guid: 3d63289e8181a4043849b43a3b04b8ba, type: 3}
+        mixerGroup: {fileID: -2844677377044231637, guid: daf6ca941928f1549ab4136d0a3177de, type: 2}

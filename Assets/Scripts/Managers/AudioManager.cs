@@ -4,7 +4,7 @@ using DataStorage;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace GameManagers
+namespace Managers
 {
     using IDType = Int64;
 
